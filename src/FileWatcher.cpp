@@ -4,7 +4,7 @@
 FileWatcher::FileWatcher(QObject* parent)
     : QObject{parent},
       m_ipRegex{std::regex(R"(\[StateConnectToGame\] We're connected to the server! Host = ([0-9.]+))")},
-      m_resetRegex{std::regex(R"(\[StateWaitingForRewards\])")}
+      m_resetRegex{std::regex(R"(\[EAC Client\] DisconnectFromGameServer)")},
       m_watcher{new FileChangeWorker()},
       m_thread{new QThread(this)}
 {

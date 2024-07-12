@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/Main.qml</file>
+        <file>qml/MainWindow.qml</file>
+        <file>qml/PingTextWindow.qml</file>
     </qresource>
 </RCC>

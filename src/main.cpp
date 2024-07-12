@@ -4,6 +4,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QWindow>
 
 
 int main(int argc, char *argv[])
@@ -19,14 +20,24 @@ int main(int argc, char *argv[])
     // Expose objects to QML
     engine.rootContext()->setContextProperty("Manager", &manager);
 
-    const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
         &app,
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
-    engine.load(url);
+
+    engine.load(QUrl(QStringLiteral("qrc:/qml/MainWindow.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/qml/PingTextWindow.qml")));
+
+    if (engine.rootObjects().isEmpty())
+        return -1;
+
+    QObject* root = engine.rootObjects().at(0);
+    QWindow* mainWindow = qobject_cast<QWindow*>(root);
+    HWND hwnd = (HWND)mainWindow->winId();
+
+    manager.initTrayIcon(&app, root, hwnd);
 
     return app.exec();
 }

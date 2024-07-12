@@ -3,6 +3,7 @@
 
 #include "FileWatcher.h"
 #include "Pinger.h"
+#include "TrayIcon.h"
 
 #include <QObject>
 
@@ -16,6 +17,7 @@ public:
     explicit Manager(QObject *parent = nullptr);
 
     void addFile(const QString &filePath);
+    void initTrayIcon(QObject* parent, QObject* root, HWND& hwnd);
 
     Pinger* pinger();
 
@@ -26,6 +28,8 @@ public slots:
 private:
     FileWatcher m_fileWatcher;
     Pinger m_pinger;
+    TrayIcon* m_trayIcon = nullptr;
+    bool m_trayIconInitialized = false;
 };
 
 #endif // MANAGER_H

@@ -9,6 +9,8 @@ find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Widgets)
 
 qt_standard_project_setup()
 
+set(app_icon_resource "${CMAKE_CURRENT_SOURCE_DIR}/assets/fallguysping.rc")
+
 set(SOURCE_FILES
     src/FileWatcher.h
     src/FileWatcher.cpp
@@ -22,11 +24,15 @@ set(SOURCE_FILES
     src/PingWorker.cpp
     src/Pinger.h
     src/Pinger.cpp
+    src/TrayIcon.h
+    src/TrayIcon.cpp
 )
 
 qt_add_executable(appFallGuysPing
     src/main.cpp
     qml.qrc
+    assets.qrc
+    ${app_icon_resource}
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

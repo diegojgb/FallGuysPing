@@ -1,3 +1,5 @@
 build/
 
+assets/untracked/
+
 CMakeLists.txt.user

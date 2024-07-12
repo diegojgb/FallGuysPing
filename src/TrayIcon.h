@@ -25,9 +25,9 @@ signals:
     void singleClick();
 
 private:
-    QObject* m_root;
+    QSystemTrayIcon* m_trayIcon{};
+    QObject* m_root{};
     HWND m_hwnd;
-    QSystemTrayIcon* m_trayIcon;
 
     QMenu* createMenu();
 };

@@ -1,10 +1,10 @@
 #include "Pinger.h"
 
 Pinger::Pinger(QObject *parent)
-    : QObject{parent}
+    : QObject{parent},
+      m_worker{new PingWorker()},
+      m_thread{new QThread(this)}
 {
-    m_worker = new PingWorker();
-    m_thread = new QThread(this);
     m_worker->moveToThread(m_thread);
 
     connect(qApp, &QCoreApplication::aboutToQuit, m_worker, &PingWorker::finish);

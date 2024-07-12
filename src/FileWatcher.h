@@ -38,8 +38,8 @@ signals:
     void checkFailed(const QString& filePath);
 
 private:
-    QThread* m_thread;
-    FileChangeWorker* m_watcher;
+    QThread* m_thread{};
+    FileChangeWorker* m_watcher{};
     std::regex m_ipRegex;
     std::regex m_resetRegex;
     std::smatch m_match;

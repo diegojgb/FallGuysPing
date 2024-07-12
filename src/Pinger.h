@@ -30,8 +30,8 @@ signals:
     void latestPingChanged();
 
 private:
-    QThread* m_thread;
-    PingWorker* m_worker;
+    QThread* m_thread{};
+    PingWorker* m_worker{};
     QString m_latestPing = "0";
 };
 

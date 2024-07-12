@@ -28,7 +28,7 @@ public slots:
 private:
     FileWatcher m_fileWatcher;
     Pinger m_pinger;
-    TrayIcon* m_trayIcon = nullptr;
+    TrayIcon* m_trayIcon{};
     bool m_trayIconInitialized = false;
 };
 

@@ -2,5 +2,10 @@
     <qresource prefix="/">
         <file>qml/MainWindow.qml</file>
         <file>qml/PingTextWindow.qml</file>
+        <file>qml/Sidebar.qml</file>
+        <file>qml/Tab.qml</file>
+        <file>qml/MainPage.qml</file>
+        <file>qml/LabelSeparator.qml</file>
+        <file>qml/AboutPage.qml</file>
     </qresource>
 </RCC>

@@ -3,8 +3,12 @@ import QtQuick
 Window {
     id: pingTextWindow
 
-    flags: Qt.FramelessWindowHint | Qt.WA_TranslucentBackground
-           | Qt.WindowStaysOnTopHint | Qt.WindowTransparentForInput
+    property int staticFlags: Qt.FramelessWindowHint | Qt.WA_TranslucentBackground
+                              | Qt.WindowStaysOnTopHint
+    property bool transparentInput: true
+
+    flags: transparentInput ? (staticFlags | Qt.WindowTransparentForInput) : staticFlags
+
     color: "#00000000"
     visible: true
     height: pingText.height

@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>assets/ping-icon.ico</file>
+        <file>assets/ping-icon.png</file>
+        <file>assets/ping-icon-big.png</file>
     </qresource>
 </RCC>

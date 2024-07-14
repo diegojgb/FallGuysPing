@@ -1,3 +1,4 @@
+#include "DashedRectangle.h"
 #include "Manager.h"
 
 #include <QApplication>
@@ -27,8 +28,8 @@ int main(int argc, char *argv[])
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
 
-    engine.load(QUrl(QStringLiteral("qrc:/qml/MainWindow.qml")));
-    engine.load(QUrl(QStringLiteral("qrc:/qml/PingTextWindow.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/qt/qml/FallGuysPing/qml/MainWindow.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/qt/qml/FallGuysPing/qml/PingTextWindow.qml")));
 
     if (engine.rootObjects().isEmpty())
         return -1;

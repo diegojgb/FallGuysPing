@@ -11,28 +11,48 @@ qt_standard_project_setup()
 
 set(app_icon_resource "${CMAKE_CURRENT_SOURCE_DIR}/assets/fallguysping.rc")
 
-set(SOURCE_FILES
-    src/FileWatcher.h
-    src/FileWatcher.cpp
-    src/FileChangeWorker.h
-    src/FileChangeWorker.cpp
-    src/Utils.h
-    src/Utils.cpp
-    src/Manager.h
-    src/Manager.cpp
-    src/PingWorker.h
-    src/PingWorker.cpp
-    src/Pinger.h
-    src/Pinger.cpp
-    src/TrayIcon.h
-    src/TrayIcon.cpp
-)
+include_directories(src)
 
 qt_add_executable(appFallGuysPing
     src/main.cpp
-    qml.qrc
     assets.qrc
     ${app_icon_resource}
+)
+
+qt_policy(SET QTP0001 NEW)
+
+qt_add_qml_module(appFallGuysPing
+    URI FallGuysPing
+    VERSION 1.0
+
+    QML_FILES
+        qml/MainWindow.qml
+        qml/PingTextWindow.qml
+        qml/Sidebar.qml
+        qml/Tab.qml
+        qml/MainPage.qml
+        qml/LabelSeparator.qml
+        qml/AboutPage.qml
+
+    SOURCES
+        src/DashedRectangle.h
+        src/DashedRectangle.cpp
+        src/FileWatcher.h
+        src/FileWatcher.cpp
+        src/FileChangeWorker.h
+        src/FileChangeWorker.cpp
+        src/Utils.h
+        src/Utils.cpp
+        src/Manager.h
+        src/Manager.cpp
+        src/PingWorker.h
+        src/PingWorker.cpp
+        src/Pinger.h
+        src/Pinger.cpp
+        src/TrayIcon.h
+        src/TrayIcon.cpp
+        src/Settings.h
+        src/Settings.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

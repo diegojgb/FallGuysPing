@@ -30,5 +30,13 @@ ColumnLayout {
         CheckBox {
             text: "Start app minimized to the system tray."
         }
+
+        CheckBox {
+            text: "Drag the text."
+            checked: Manager.settings.draggableText
+
+            onCheckedChanged: Manager.settings.draggableText = checked
+
+        }
     }
 }

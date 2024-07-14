@@ -3,6 +3,7 @@
 
 #include "FileWatcher.h"
 #include "Pinger.h"
+#include "Settings.h"
 #include "TrayIcon.h"
 
 #include <QObject>
@@ -12,6 +13,7 @@ class Manager : public QObject
     Q_OBJECT
 
     Q_PROPERTY(Pinger* pinger READ pinger CONSTANT)
+    Q_PROPERTY(Settings* settings READ settings CONSTANT)
 
 public:
     explicit Manager(QObject *parent = nullptr);
@@ -20,6 +22,7 @@ public:
     void initTrayIcon(QObject* parent, QObject* root, HWND& hwnd);
 
     Pinger* pinger();
+    Settings* settings();
 
 public slots:
     void onIpFound(const std::string& ip);
@@ -29,6 +32,7 @@ private:
     FileWatcher m_fileWatcher;
     Pinger m_pinger;
     TrayIcon* m_trayIcon{};
+    Settings m_settings;
     bool m_trayIconInitialized = false;
 };
 

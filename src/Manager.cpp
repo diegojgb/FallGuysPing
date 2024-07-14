@@ -37,3 +37,9 @@ Pinger* Manager::pinger()
 {
     return &m_pinger;
 }
+
+Settings* Manager::settings()
+{
+    return &m_settings;
+}
+

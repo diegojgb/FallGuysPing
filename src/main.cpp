@@ -7,6 +7,8 @@
 #include <QQmlContext>
 #include <QWindow>
 
+// #include <Windows.h>
+
 
 int main(int argc, char *argv[])
 {
@@ -20,6 +22,7 @@ int main(int argc, char *argv[])
 
     // Expose objects to QML
     engine.rootContext()->setContextProperty("Manager", &manager);
+    qmlRegisterUncreatableType<Settings>("TextCorner", 1, 0, "TextCorner", "Enum is not a type");
 
     QObject::connect(
         &engine,
@@ -39,6 +42,9 @@ int main(int argc, char *argv[])
     HWND hwnd = (HWND)mainWindow->winId();
 
     manager.initTrayIcon(&app, root, hwnd);
+
+    // auto pingTextWindow = (HWND)qobject_cast<QWindow*>(engine.rootObjects().at(1))->winId();
+    // SetWindowPos(pingTextWindow, ((HWND)-1), 0, 0, 50, 50, 0);
 
     return app.exec();
 }

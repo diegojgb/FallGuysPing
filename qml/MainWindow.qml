@@ -1,14 +1,15 @@
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.Imagine
 import QtQuick.Layouts
 
-Window {
+ApplicationWindow {
     id: root
 
     objectName: "mainWindow"
     width: 650
     height: 400
     visible: true
+    palette: lightTheme
 
     property color sidebarBgColor: "#e8e8e8"
     property color mainbarBgColor: "#fff"
@@ -46,6 +47,13 @@ Window {
             }
         }
 
+        // Separator
+        Rectangle {
+            Layout.fillHeight: true
+            Layout.preferredWidth: 1
+            color: "#e0e0e0"
+        }
+
         Rectangle {
             id: mainbar
             Layout.fillHeight: true
@@ -72,5 +80,27 @@ Window {
                 visible: root.activeView === MainWindow.View.AboutView
             }
         }
+    }
+
+    Palette {
+        id: lightTheme
+        alternateBase: "#fff"
+        base: "#e6e6e6"
+        button: "#eee"
+        buttonText: "#000"
+        dark: "#999"
+        highlight: '#0078d4'
+        highlightedText: "#fff"
+        light: "#fff"
+        mid: "#bbb"
+        midlight: "#ccc"
+        placeholderText: "#80000000"
+        shadow: "#777"
+        text: "#000"
+        window: "#eee"
+        windowText: "#000"
+        accent: "#eee"
+
+        disabled.text: '#737373'
     }
 }

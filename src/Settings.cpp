@@ -33,3 +33,18 @@ void Settings::setDraggableText(bool newDraggableText)
 
     emit draggableTextChanged();
 }
+
+TextCorner::Value Settings::textCorner() const
+{
+    return m_textCorner;
+}
+
+void Settings::setTextCorner(const TextCorner::Value &newTextCorner)
+{
+    if (m_textCorner == newTextCorner)
+        return;
+
+    m_textCorner = newTextCorner;
+
+    emit textCornerChanged();
+}

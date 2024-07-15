@@ -33,6 +33,8 @@ qt_add_qml_module(appFallGuysPing
         qml/MainPage.qml
         qml/LabelSeparator.qml
         qml/AboutPage.qml
+        qml/SquareRadioButton.qml
+        qml/CusSwitch.qml
 
     SOURCES
         src/DashedRectangle.h
@@ -53,6 +55,7 @@ qt_add_qml_module(appFallGuysPing
         src/TrayIcon.cpp
         src/Settings.h
         src/Settings.cpp
+        src/TextCorner.h
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

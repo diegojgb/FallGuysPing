@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import FallGuysPing
+import TextCorner 1.0
 
 Window {
     id: root
@@ -9,15 +10,46 @@ Window {
                               | Qt.WindowStaysOnTopHint
     property bool transparentInput: !Manager.settings.draggableText
     property bool draggable: Manager.settings.draggableText
+    property int textCorner: Manager.settings.textCorner
 
     flags: transparentInput ? (staticFlags | Qt.WindowTransparentForInput) : staticFlags
     color: "#00000000"
-    visible: true
+    visible: false
     height: pingText.height
     width: pingText.width
 
-    // x: Screen.width - pingText.width
-    // y: 0
+    Component.onCompleted: {
+        root.x = calcX(root.textCorner)
+        root.y = calcY(root.textCorner)
+        root.visible = true
+    }
+
+    onTextCornerChanged: {
+        root.x = calcX(root.textCorner)
+        root.y = calcY(root.textCorner)
+    }
+
+    function calcY(corner) {
+        if (corner === TextCorner.TopLeft || corner === TextCorner.TopRight)
+            return -4
+
+        if (corner === TextCorner.BottomLeft
+                || corner === TextCorner.BottomRight)
+            return Screen.height - pingText.height + 4
+
+        return root.y
+    }
+
+    function calcX(corner) {
+        if (corner === TextCorner.TopLeft || corner === TextCorner.BottomLeft)
+            return -pingText.leftPadding + 3
+
+        if (corner === TextCorner.TopRight || corner === TextCorner.BottomRight)
+            return Screen.width - pingText.width + pingText.rightPadding - 3
+
+        return root.y
+    }
+
     DashedRectangle {
         anchors.fill: parent
         borderColor: "#aaa"

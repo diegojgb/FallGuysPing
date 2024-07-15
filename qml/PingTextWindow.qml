@@ -19,8 +19,7 @@ Window {
     width: pingText.width
 
     Component.onCompleted: {
-        root.x = calcX(root.textCorner)
-        root.y = calcY(root.textCorner)
+        root.bindXY(root.textCorner)
         root.visible = true
     }
 
@@ -28,29 +27,35 @@ Window {
         if (root.textCorner === TextCorner.Custom)
             return
 
-        root.x = calcX(root.textCorner)
-        root.y = calcY(root.textCorner)
+        root.bindXY(root.textCorner)
     }
 
-    function calcY(corner) {
+    function bindXY(corner) {
+        bindX(corner)
+        bindY(corner)
+    }
+
+    function bindX(corner) {
+        if (corner === TextCorner.TopLeft || corner === TextCorner.BottomLeft)
+            root.x = Qt.binding(function () {
+                return -pingText.leftPadding + 3
+            })
+
+        if (corner === TextCorner.TopRight || corner === TextCorner.BottomRight)
+            root.x = Qt.binding(function () {
+                return Screen.width - pingText.width + pingText.rightPadding - 3
+            })
+    }
+
+    function bindY(corner) {
         if (corner === TextCorner.TopLeft || corner === TextCorner.TopRight)
-            return -4
+            root.y = -4
 
         if (corner === TextCorner.BottomLeft
                 || corner === TextCorner.BottomRight)
-            return Screen.height - pingText.height + 4
-
-        return root.y
-    }
-
-    function calcX(corner) {
-        if (corner === TextCorner.TopLeft || corner === TextCorner.BottomLeft)
-            return -pingText.leftPadding + 3
-
-        if (corner === TextCorner.TopRight || corner === TextCorner.BottomRight)
-            return Screen.width - pingText.width + pingText.rightPadding - 3
-
-        return root.y
+            root.y = Qt.binding(function () {
+                return Screen.height - pingText.height + 4
+            })
     }
 
     DashedRectangle {
@@ -69,6 +74,16 @@ Window {
         leftPadding: 12
         bottomPadding: 3
         renderType: Text.NativeRendering
+
+        onTextChanged: {
+            if (root.textCorner === TextCorner.Custom) {
+                var textRightPosition = root.x + root.width - pingText.rightPadding
+                var textOverflows = textRightPosition > Screen.width
+
+                if (textOverflows)
+                    root.x += Screen.width - textRightPosition - 2
+            }
+        }
     }
 
     MouseArea {

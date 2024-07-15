@@ -25,6 +25,9 @@ Window {
     }
 
     onTextCornerChanged: {
+        if (root.textCorner === TextCorner.Custom)
+            return
+
         root.x = calcX(root.textCorner)
         root.y = calcY(root.textCorner)
     }
@@ -87,6 +90,8 @@ Window {
                                                         mouse.y - clickPos.y)
                                    root.x += delta.x
                                    root.y += delta.y
+
+                                   Manager.settings.textCorner = TextCorner.Custom
                                }
                            }
     }

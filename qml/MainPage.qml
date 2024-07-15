@@ -6,6 +6,13 @@ import TextCorner 1.0
 ColumnLayout {
     id: page
 
+    property int textCorner: Manager.settings.textCorner
+
+    onTextCornerChanged: {
+        if (page.textCorner === TextCorner.Custom)
+            radioGroup.checkState = Qt.Unchecked
+    }
+
     Label {
         text: 'General settings'
         font.pointSize: 17

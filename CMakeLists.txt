@@ -35,6 +35,7 @@ qt_add_qml_module(appFallGuysPing
         qml/AboutPage.qml
         qml/SquareRadioButton.qml
         qml/CusSwitch.qml
+        qml/CornerSelect.qml
 
     SOURCES
         src/DashedRectangle.h

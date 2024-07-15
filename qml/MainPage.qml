@@ -8,11 +8,6 @@ ColumnLayout {
 
     property int textCorner: Manager.settings.textCorner
 
-    onTextCornerChanged: {
-        if (page.textCorner === TextCorner.Custom)
-            radioGroup.checkState = Qt.Unchecked
-    }
-
     Label {
         text: 'General settings'
         font.pointSize: 17
@@ -48,20 +43,11 @@ ColumnLayout {
         text: 'Text position'
     }
 
-    ButtonGroup {
-        id: radioGroup
-
-        onClicked: button => {
-                       Manager.settings.textCorner = button.positionValue
-                   }
-    }
-
     ColumnLayout {
         Layout.topMargin: 10
         Layout.leftMargin: 20
 
         RowLayout {
-
             CornerSelect {
                 Layout.preferredWidth: 145
                 Layout.preferredHeight: 75

@@ -102,29 +102,14 @@ ColumnLayout {
                 text: "Text color:"
             }
 
-            Rectangle {
-                id: colorPickerRect
+            ColorPicker {
+                id: textColorPicker
                 Layout.leftMargin: 3
                 Layout.preferredWidth: 22
                 Layout.preferredHeight: 22
-                radius: width / 2
-                border.color: "#888"
-                border.width: 1
-                color: Manager.settings.textColor
+                pickedColor: Manager.settings.textColor
 
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: colorDialog.open()
-                }
-            }
-
-            ColorDialog {
-                id: colorDialog
-                title: "Pick a Color"
-                color: Manager.settings.textColor
-
-                onColorChanged: Manager.settings.textColor = colorDialog.color
+                onPickedColorChanged: Manager.settings.textColor = textColorPicker.pickedColor
             }
         }
 

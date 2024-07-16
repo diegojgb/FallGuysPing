@@ -88,6 +88,7 @@ ColumnLayout {
                 id: textSizeBox
                 Layout.leftMargin: 5
                 Layout.preferredWidth: 80
+                editable: true
                 value: Manager.settings.textSize
 
                 onValueChanged: Manager.settings.textSize = textSizeBox.value

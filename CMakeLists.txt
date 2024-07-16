@@ -38,6 +38,7 @@ qt_add_qml_module(appFallGuysPing
         qml/CornerSelect.qml
         qml/FusionSpinBox.qml
         qml/ColorPicker.qml
+        qml/CustomComboBox.qml
 
     SOURCES
         src/DashedRectangle.h

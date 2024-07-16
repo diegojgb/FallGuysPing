@@ -108,3 +108,18 @@ void Settings::setBoldText(bool newBoldText)
 
     emit boldTextChanged();
 }
+
+QString Settings::fontFamily() const
+{
+    return m_fontFamily;
+}
+
+void Settings::setFontFamily(const QString &newFontFamily)
+{
+    if (m_fontFamily == newFontFamily)
+        return;
+
+    m_fontFamily = newFontFamily;
+
+    emit fontFamilyChanged();
+}

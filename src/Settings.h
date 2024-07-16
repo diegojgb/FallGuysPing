@@ -17,6 +17,7 @@ class Settings : public QObject
     Q_PROPERTY(int textSize READ textSize WRITE setTextSize NOTIFY textSizeChanged FINAL)
     Q_PROPERTY(bool textOutline READ textOutline WRITE setTextOutline NOTIFY textOutlineChanged FINAL)
     Q_PROPERTY(bool boldText READ boldText WRITE setBoldText NOTIFY boldTextChanged FINAL)
+    Q_PROPERTY(QString fontFamily READ fontFamily WRITE setFontFamily NOTIFY fontFamilyChanged FINAL)
 
 public:
     explicit Settings(QObject* parent = nullptr);
@@ -42,6 +43,9 @@ public:
     bool boldText() const;
     void setBoldText(bool newBoldText);
 
+    QString fontFamily() const;
+    void setFontFamily(const QString &newFontFamily);
+
 signals:
     void startMinimizedChanged();
     void draggableTextChanged();
@@ -50,6 +54,7 @@ signals:
     void textSizeChanged();
     void textOutlineChanged();
     void boldTextChanged();
+    void fontFamilyChanged();
 
 private:
     bool m_startMinimized = false;
@@ -59,6 +64,7 @@ private:
     int m_textSize = 14;
     bool m_textOutline = false;
     bool m_boldText = true;
+    QString m_fontFamily = "Consolas";
 };
 
 #endif // SETTINGS_H

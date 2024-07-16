@@ -11,6 +11,7 @@ Window {
     property bool transparentInput: !Manager.settings.draggableText
     property bool draggable: Manager.settings.draggableText
     property int textCorner: Manager.settings.textCorner
+    property int textPadding: 12
 
     flags: transparentInput ? (staticFlags | Qt.WindowTransparentForInput) : staticFlags
     color: "#00000000"
@@ -49,19 +50,36 @@ Window {
 
     function bindY(corner) {
         if (corner === TextCorner.TopLeft || corner === TextCorner.TopRight)
-            root.y = -10
+            root.y = -9
 
         if (corner === TextCorner.BottomLeft
                 || corner === TextCorner.BottomRight)
             root.y = Qt.binding(function () {
-                return Screen.height - pingText.height + 10
+                return Screen.height - pingText.height + 11
             })
     }
 
+    // Rectangle {
+    //     anchors.centerIn: parent
+    //     width: pingText.width - 24
+    //     height: pingText.height - 24
+    //     color: "black"
+    // }
     DashedRectangle {
         anchors.fill: parent
         borderColor: "#aaa"
         visible: dragArea.containsMouse
+    }
+
+    TextMetrics {
+        id: textMetrics
+        font: pingText.font
+        text: pingText.text
+    }
+
+    FontMetrics {
+        id: fontMetrics
+        font: pingText.font
     }
 
     Text {
@@ -71,10 +89,12 @@ Window {
         font.pointSize: Manager.settings.textSize
         style: Manager.settings.textOutline ? Text.Outline : Text.Normal
         font.bold: Manager.settings.boldText
-        rightPadding: 12
-        leftPadding: 12
-        topPadding: -pingText.font.pointSize / 2.22 + 12
-        bottomPadding: -pingText.font.pointSize / 3.6 + 12
+        font.family: Manager.settings.fontFamily
+
+        rightPadding: root.textPadding
+        leftPadding: root.textPadding
+        topPadding: textMetrics.tightBoundingRect.height - fontMetrics.ascent + root.textPadding
+        bottomPadding: -fontMetrics.descent + 2 + root.textPadding
         renderType: Text.NativeRendering
 
         onTextChanged: {

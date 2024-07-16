@@ -118,6 +118,16 @@ ColumnLayout {
             Layout.topMargin: 15
             spacing: 15
 
+            CustomComboBox {
+                id: fontFamilyBox
+                model: Qt.fontFamilies()
+                popupHeight: 250
+                currentIndex: fontFamilyBox.model.indexOf(
+                                  Manager.settings.fontFamily)
+
+                onCurrentTextChanged: Manager.settings.fontFamily = fontFamilyBox.currentText
+            }
+
             CheckBox {
                 text: "Bold text"
                 checked: Manager.settings.boldText

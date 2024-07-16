@@ -126,5 +126,23 @@ ColumnLayout {
                 onColorChanged: Manager.settings.textColor = colorDialog.color
             }
         }
+
+        RowLayout {
+            id: textFormatSecondRow
+            Layout.topMargin: 15
+            spacing: 15
+
+            CheckBox {
+                text: "Bold text"
+                checked: Manager.settings.boldText
+                onCheckedChanged: Manager.settings.boldText = checked
+            }
+
+            CheckBox {
+                text: "Outlined text"
+                checked: Manager.settings.textOutline
+                onCheckedChanged: Manager.settings.textOutline = checked
+            }
+        }
     }
 }

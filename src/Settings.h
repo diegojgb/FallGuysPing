@@ -15,6 +15,8 @@ class Settings : public QObject
     Q_PROPERTY(TextCorner::Value textCorner READ textCorner WRITE setTextCorner NOTIFY textCornerChanged FINAL)
     Q_PROPERTY(QColor textColor READ textColor WRITE setTextColor NOTIFY textColorChanged FINAL)
     Q_PROPERTY(int textSize READ textSize WRITE setTextSize NOTIFY textSizeChanged FINAL)
+    Q_PROPERTY(bool textOutline READ textOutline WRITE setTextOutline NOTIFY textOutlineChanged FINAL)
+    Q_PROPERTY(bool boldText READ boldText WRITE setBoldText NOTIFY boldTextChanged FINAL)
 
 public:
     explicit Settings(QObject* parent = nullptr);
@@ -34,12 +36,20 @@ public:
     int textSize() const;
     void setTextSize(int newTextSize);
 
+    bool textOutline() const;
+    void setTextOutline(bool newTextOutline);
+
+    bool boldText() const;
+    void setBoldText(bool newBoldText);
+
 signals:
     void startMinimizedChanged();
     void draggableTextChanged();
     void textCornerChanged();
     void textColorChanged();
     void textSizeChanged();
+    void textOutlineChanged();
+    void boldTextChanged();
 
 private:
     bool m_startMinimized = false;
@@ -47,6 +57,8 @@ private:
     TextCorner::Value m_textCorner = TextCorner::Value::TopRight;
     QColor m_textColor = QColor("#fff");
     int m_textSize = 14;
+    bool m_textOutline = false;
+    bool m_boldText = true;
 };
 
 #endif // SETTINGS_H

@@ -78,3 +78,33 @@ void Settings::setTextSize(int newTextSize)
 
     emit textSizeChanged();
 }
+
+bool Settings::textOutline() const
+{
+    return m_textOutline;
+}
+
+void Settings::setTextOutline(bool newTextOutline)
+{
+    if (m_textOutline == newTextOutline)
+        return;
+
+    m_textOutline = newTextOutline;
+
+    emit textOutlineChanged();
+}
+
+bool Settings::boldText() const
+{
+    return m_boldText;
+}
+
+void Settings::setBoldText(bool newBoldText)
+{
+    if (m_boldText == newBoldText)
+        return;
+
+    m_boldText = newBoldText;
+
+    emit boldTextChanged();
+}

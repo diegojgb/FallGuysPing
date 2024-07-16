@@ -69,7 +69,8 @@ Window {
         text: Manager.pinger.latestPing
         color: Manager.settings.textColor
         font.pointSize: Manager.settings.textSize
-        font.bold: true
+        style: Manager.settings.textOutline ? Text.Outline : Text.Normal
+        font.bold: Manager.settings.boldText
         rightPadding: 12
         leftPadding: 12
         bottomPadding: 3

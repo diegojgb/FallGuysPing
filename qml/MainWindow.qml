@@ -23,6 +23,11 @@ ApplicationWindow {
         AboutView
     }
 
+    Pane {
+        anchors.fill: parent
+        focusPolicy: Qt.ClickFocus
+    }
+
     // Hide the window instead of closing it when the close button is clicked
     // @disable-check M16
     onClosing: close => {
@@ -64,8 +69,8 @@ ApplicationWindow {
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.topMargin: 27
-                anchors.leftMargin: 24
+                anchors.topMargin: 24
+                anchors.leftMargin: 20
 
                 visible: root.activeView === MainWindow.View.MainView
             }

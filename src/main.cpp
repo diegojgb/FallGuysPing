@@ -6,12 +6,14 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QWindow>
+#include <QStyleFactory>
 
 // #include <Windows.h>
 
 
 int main(int argc, char *argv[])
 {
+    QApplication::setStyle(QStyleFactory::create("Fusion"));
     QApplication app(argc, argv);
 
     Manager manager;

@@ -4,6 +4,7 @@
 #include "TextCorner.h"
 
 #include <QObject>
+#include <QColor>
 
 class Settings : public QObject
 {
@@ -12,6 +13,8 @@ class Settings : public QObject
     Q_PROPERTY(bool startMinimized READ startMinimized WRITE setStartMinimized NOTIFY startMinimizedChanged FINAL)
     Q_PROPERTY(bool draggableText READ draggableText WRITE setDraggableText NOTIFY draggableTextChanged FINAL)
     Q_PROPERTY(TextCorner::Value textCorner READ textCorner WRITE setTextCorner NOTIFY textCornerChanged FINAL)
+    Q_PROPERTY(QColor textColor READ textColor WRITE setTextColor NOTIFY textColorChanged FINAL)
+    Q_PROPERTY(int textSize READ textSize WRITE setTextSize NOTIFY textSizeChanged FINAL)
 
 public:
     explicit Settings(QObject* parent = nullptr);
@@ -25,15 +28,25 @@ public:
     TextCorner::Value textCorner() const;
     void setTextCorner(const TextCorner::Value &newTextCorner);
 
+    QColor textColor() const;
+    void setTextColor(const QColor &newTextColor);
+
+    int textSize() const;
+    void setTextSize(int newTextSize);
+
 signals:
     void startMinimizedChanged();
     void draggableTextChanged();
     void textCornerChanged();
+    void textColorChanged();
+    void textSizeChanged();
 
 private:
     bool m_startMinimized = false;
     bool m_draggableText = false;
     TextCorner::Value m_textCorner = TextCorner::Value::TopRight;
+    QColor m_textColor = QColor("#fff");
+    int m_textSize = 14;
 };
 
 #endif // SETTINGS_H

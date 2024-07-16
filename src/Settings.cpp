@@ -48,3 +48,33 @@ void Settings::setTextCorner(const TextCorner::Value &newTextCorner)
 
     emit textCornerChanged();
 }
+
+QColor Settings::textColor() const
+{
+    return m_textColor;
+}
+
+void Settings::setTextColor(const QColor &newTextColor)
+{
+    if (m_textColor == newTextColor)
+        return;
+
+    m_textColor = newTextColor;
+
+    emit textColorChanged();
+}
+
+int Settings::textSize() const
+{
+    return m_textSize;
+}
+
+void Settings::setTextSize(int newTextSize)
+{
+    if (m_textSize == newTextSize)
+        return;
+
+    m_textSize = newTextSize;
+
+    emit textSizeChanged();
+}

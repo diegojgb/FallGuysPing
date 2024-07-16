@@ -67,9 +67,9 @@ Window {
     Text {
         id: pingText
         text: Manager.pinger.latestPing
-        color: "#fff"
+        color: Manager.settings.textColor
+        font.pointSize: Manager.settings.textSize
         font.bold: true
-        font.pointSize: 14
         rightPadding: 12
         leftPadding: 12
         bottomPadding: 3

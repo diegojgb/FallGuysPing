@@ -49,12 +49,12 @@ Window {
 
     function bindY(corner) {
         if (corner === TextCorner.TopLeft || corner === TextCorner.TopRight)
-            root.y = -4
+            root.y = -10
 
         if (corner === TextCorner.BottomLeft
                 || corner === TextCorner.BottomRight)
             root.y = Qt.binding(function () {
-                return Screen.height - pingText.height + 4
+                return Screen.height - pingText.height + 10
             })
     }
 
@@ -73,7 +73,8 @@ Window {
         font.bold: Manager.settings.boldText
         rightPadding: 12
         leftPadding: 12
-        bottomPadding: 3
+        topPadding: -pingText.font.pointSize / 2.22 + 12
+        bottomPadding: -pingText.font.pointSize / 3.6 + 12
         renderType: Text.NativeRendering
 
         onTextChanged: {

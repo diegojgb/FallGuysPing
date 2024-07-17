@@ -18,6 +18,7 @@ ApplicationWindow {
     property int transitionDuration: 150
     property string appVersion: "v1.0.0"
     property int activeView: sidebar.selectedView
+    property var supportedFonts: ["Arial", "Consolas", "Courier", "Georgia", "Segoe UI", "Tahoma", "Times New Roman", "Trebuchet MS", "Verdana"]
 
     enum View {
         MainView,

@@ -125,10 +125,18 @@ ColumnLayout {
 
             CustomComboBox {
                 id: fontFamilyBox
-                model: Qt.fontFamilies()
-                popupHeight: 250
+                model: root.supportedFonts
+                popupHeight: 180
                 currentIndex: fontFamilyBox.model.indexOf(
                                   Manager.settings.fontFamily)
+                displayText: metrics.elidedText
+
+                TextMetrics {
+                    id: metrics
+                    text: fontFamilyBox.currentText
+                    elide: Qt.ElideRight
+                    elideWidth: fontFamilyBox.width - 30
+                }
 
                 onCurrentTextChanged: Manager.settings.fontFamily = fontFamilyBox.currentText
             }

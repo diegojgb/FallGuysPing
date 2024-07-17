@@ -8,9 +8,10 @@ ColumnLayout {
     id: page
 
     property int textCorner: Manager.settings.textCorner
+    property int sectionTopMargin: 20
 
     Label {
-        text: 'General settings'
+        text: 'App settings'
         font.pointSize: 17
 
         Behavior on color {
@@ -22,7 +23,7 @@ ColumnLayout {
 
     LabelSeparator {
         Layout.topMargin: 16
-        text: 'App settings'
+        text: 'Windows'
     }
 
     ColumnLayout {
@@ -41,8 +42,8 @@ ColumnLayout {
     }
 
     LabelSeparator {
-        Layout.topMargin: 16
-        text: 'Text position'
+        Layout.topMargin: page.sectionTopMargin
+        text: 'Position'
     }
 
     ColumnLayout {
@@ -67,8 +68,8 @@ ColumnLayout {
     }
 
     LabelSeparator {
-        Layout.topMargin: 16
-        text: 'Text format'
+        Layout.topMargin: page.sectionTopMargin
+        text: 'Formatting'
     }
 
     ColumnLayout {

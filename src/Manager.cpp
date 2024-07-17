@@ -1,5 +1,6 @@
 #include "Manager.h"
 
+#include <QDebug>
 
 Manager::Manager(QObject *parent)
     : QObject{parent}
@@ -23,6 +24,26 @@ void Manager::initTrayIcon(QObject* parent, QObject* root, HWND& hwnd)
     m_trayIconInitialized = true;
 }
 
+bool Manager::isProcessRunning(LPCTSTR& processName)
+{
+    bool exists = false;
+    PROCESSENTRY32 entry;
+    entry.dwSize = sizeof(PROCESSENTRY32);
+
+    HANDLE hsnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+
+    if (Process32First(hsnap, &entry)) {
+        do {
+            if (!lstrcmpi(entry.szExeFile, processName)) {
+                exists = true;
+            }
+        } while (Process32Next(hsnap, &entry));
+    }
+
+    CloseHandle(hsnap);
+    return exists;
+}
+
 void Manager::onIpFound(const std::string& ip)
 {
     m_pinger.start(ip);
@@ -31,6 +52,12 @@ void Manager::onIpFound(const std::string& ip)
 void Manager::onResetFound()
 {
     m_pinger.stop();
+}
+
+bool Manager::isFallGuysRunning()
+{
+    LPCTSTR processName = TEXT("FallGuys_client_game.exe");
+    return isProcessRunning(processName);
 }
 
 Pinger* Manager::pinger()

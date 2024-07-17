@@ -8,6 +8,10 @@
 
 #include <QObject>
 
+#include <windows.h>
+#include <tlhelp32.h>
+#include <tchar.h>
+
 class Manager : public QObject
 {
     Q_OBJECT
@@ -34,6 +38,10 @@ private:
     TrayIcon* m_trayIcon{};
     Settings m_settings;
     bool m_trayIconInitialized = false;
+    HANDLE m_hProcess = NULL;
+
+    bool isFallGuysRunning();
+    bool isProcessRunning(LPCTSTR& processName);
 };
 
 #endif // MANAGER_H

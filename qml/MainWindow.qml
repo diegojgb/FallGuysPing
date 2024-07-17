@@ -7,7 +7,7 @@ ApplicationWindow {
 
     objectName: "mainWindow"
     width: 650
-    height: 600
+    height: 480
     visible: true
     palette: lightTheme
 

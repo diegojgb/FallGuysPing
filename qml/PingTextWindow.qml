@@ -39,23 +39,23 @@ Window {
     function bindX(corner) {
         if (corner === TextCorner.TopLeft || corner === TextCorner.BottomLeft)
             root.x = Qt.binding(function () {
-                return -pingText.leftPadding + 3
+                return -pingText.leftPadding + 4
             })
 
         if (corner === TextCorner.TopRight || corner === TextCorner.BottomRight)
             root.x = Qt.binding(function () {
-                return Screen.width - pingText.width + pingText.rightPadding - 3
+                return Screen.width - pingText.width + pingText.rightPadding - 4
             })
     }
 
     function bindY(corner) {
         if (corner === TextCorner.TopLeft || corner === TextCorner.TopRight)
-            root.y = -9
+            root.y = -8
 
         if (corner === TextCorner.BottomLeft
                 || corner === TextCorner.BottomRight)
             root.y = Qt.binding(function () {
-                return Screen.height - pingText.height + 11
+                return Screen.height - pingText.height + 10
             })
     }
 

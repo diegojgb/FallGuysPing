@@ -19,6 +19,7 @@ Switch {
     property color indicatorColor_off_disable: "#b6bdc5"
 
     spacing: 10
+    padding: 0
 
     indicator: Rectangle {
         id: indicatorRect

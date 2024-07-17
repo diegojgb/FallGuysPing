@@ -7,13 +7,14 @@ ApplicationWindow {
 
     objectName: "mainWindow"
     width: 650
-    height: 450
+    height: 600
     visible: true
     palette: lightTheme
 
     property color sidebarBgColor: "#e8e8e8"
     property color mainbarBgColor: "#fff"
     property color accentColor: "#017ad9"
+    property color selectionColor: "#0078d4"
     property int transitionDuration: 150
     property string appVersion: "v1.0.0"
     property int activeView: sidebar.selectedView

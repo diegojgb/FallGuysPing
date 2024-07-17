@@ -26,6 +26,7 @@ ColumnLayout {
     }
 
     ColumnLayout {
+        id: appSettingsCol
         Layout.topMargin: 10
         Layout.leftMargin: 20
         spacing: 10
@@ -45,6 +46,7 @@ ColumnLayout {
     }
 
     ColumnLayout {
+        id: textPositionCol
         Layout.topMargin: 10
         Layout.leftMargin: 20
 
@@ -56,7 +58,7 @@ ColumnLayout {
 
             CusSwitch {
                 Layout.leftMargin: 15
-                text: "Enable overlay dragging."
+                text: "Enable overlay dragging"
                 checked: Manager.settings.draggableText
 
                 onCheckedChanged: Manager.settings.draggableText = checked
@@ -88,6 +90,8 @@ ColumnLayout {
                 id: textSizeBox
                 Layout.leftMargin: 5
                 Layout.preferredWidth: 80
+                from: 1
+                to: 1000
                 editable: true
                 value: Manager.settings.textSize
 

@@ -59,12 +59,6 @@ Window {
             })
     }
 
-    // Rectangle {
-    //     anchors.centerIn: parent
-    //     width: pingText.width - 24
-    //     height: pingText.height - 24
-    //     color: "black"
-    // }
     DashedRectangle {
         anchors.fill: parent
         borderColor: "#aaa"

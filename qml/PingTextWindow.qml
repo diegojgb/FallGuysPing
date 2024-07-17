@@ -78,6 +78,10 @@ Window {
 
     Text {
         id: pingText
+
+        property int prevTextLen
+        property int prevWidth
+
         text: Manager.pinger.latestPing
         color: Manager.settings.textColor
         font.pointSize: Manager.settings.textSize
@@ -88,16 +92,28 @@ Window {
         rightPadding: root.textPadding
         leftPadding: root.textPadding
         topPadding: textMetrics.tightBoundingRect.height - fontMetrics.ascent + root.textPadding
-        bottomPadding: -fontMetrics.descent + 2 + root.textPadding
+        bottomPadding: -fontMetrics.descent + root.textPadding
         renderType: Text.NativeRendering
 
-        onTextChanged: {
-            if (root.textCorner === TextCorner.Custom) {
-                var textRightPosition = root.x + root.width - pingText.rightPadding
-                var textOverflows = textRightPosition > Screen.width
+        Component.onCompleted: {
+            pingText.prevWidth = pingText.width
+            pingText.prevTextLen = pingText.text.length
+        }
 
-                if (textOverflows)
-                    root.x += Screen.width - textRightPosition - 2
+        onTextChanged: {
+            if (root.textCorner !== TextCorner.Custom)
+                return
+
+            var middleLine = Screen.width / 2
+            if (root.x <= middleLine)
+                return
+
+            if (pingText.text.length !== pingText.prevTextLen) {
+                var newSpace = pingText.width - pingText.prevWidth
+                root.x = root.x - newSpace
+
+                pingText.prevTextLen = pingText.text.length
+                pingText.prevWidth = pingText.width
             }
         }
     }

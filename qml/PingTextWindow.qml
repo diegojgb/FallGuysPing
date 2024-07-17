@@ -39,12 +39,12 @@ Window {
     function bindX(corner) {
         if (corner === TextCorner.TopLeft || corner === TextCorner.BottomLeft)
             root.x = Qt.binding(function () {
-                return -pingText.leftPadding + 4
+                return -pingText.leftPadding + 3
             })
 
         if (corner === TextCorner.TopRight || corner === TextCorner.BottomRight)
             root.x = Qt.binding(function () {
-                return Screen.width - pingText.width + pingText.rightPadding - 4
+                return Screen.width - pingText.width + pingText.rightPadding - 3
             })
     }
 
@@ -68,7 +68,7 @@ Window {
     TextMetrics {
         id: textMetrics
         font: pingText.font
-        text: pingText.text
+        text: "0123456789"
     }
 
     FontMetrics {

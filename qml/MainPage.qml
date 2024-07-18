@@ -36,7 +36,7 @@ ColumnLayout {
     // }
     CusSwitch {
         Layout.topMargin: page.sectionTopMargin
-        text: "Always visible (good for customizing)"
+        text: "Always visible"
         checked: Manager.settings.alwaysVisible
 
         onCheckedChanged: Manager.settings.alwaysVisible = checked

@@ -2,12 +2,12 @@ import QtQuick
 import QtQuick.Controls.Imagine
 import QtQuick.Layouts
 
-Window {
+ApplicationWindow {
     id: root
 
     objectName: "mainWindow"
     width: 650
-    height: 480
+    height: 410
     visible: true
     palette: lightTheme
 

@@ -6,7 +6,7 @@ Manager::Manager(QObject *parent)
     : QObject{parent}
 {
     connect(&m_fileWatcher, &FileWatcher::ipFound, this, &Manager::onIpFound);
-    connect(&m_fileWatcher, &FileWatcher::resetFound, this, &Manager::onResetFound);
+    connect(&m_fileWatcher, &FileWatcher::disconnectFound, this, &Manager::onDisconnectFound);
 }
 
 void Manager::addFile(const QString& filePath)
@@ -49,7 +49,7 @@ void Manager::onIpFound(const std::string& ip)
     m_pinger.start(ip);
 }
 
-void Manager::onResetFound()
+void Manager::onDisconnectFound()
 {
     m_pinger.stop();
 }

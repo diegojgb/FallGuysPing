@@ -30,7 +30,7 @@ public:
 
 public slots:
     void onIpFound(const std::string& ip);
-    void onResetFound();
+    void onDisconnectFound();
 
 private:
     FileWatcher m_fileWatcher;

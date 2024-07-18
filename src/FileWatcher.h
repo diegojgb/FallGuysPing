@@ -34,7 +34,7 @@ public slots:
 
 signals:
     void ipFound(const std::string& ip);
-    void resetFound();
+    void disconnectFound();
     void checkFailed(const QString& filePath);
 
 private:
@@ -43,6 +43,9 @@ private:
     std::regex m_ipRegex;
     std::regex m_resetRegex;
     std::smatch m_match;
+
+    bool testText(std::string& text);
+    void initCheck(const QString &filePath);
 };
 
 #endif // FILEWATCHER_H

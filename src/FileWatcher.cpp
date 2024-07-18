@@ -33,8 +33,46 @@ void FileWatcher::changeFilePath(const QString& oldKey, const QString& newKey)
     addFilePath(newKey);
 }
 
+bool FileWatcher::testText(std::string& text)
+{
+    bool ipMatch = std::regex_search(text, m_match, m_ipRegex);
+
+    if (ipMatch) {
+        emit ipFound(m_match[1].str());
+        return true;
+    }
+
+    if (std::regex_search(text, m_resetRegex)) {
+        emit disconnectFound();
+        return true;
+    }
+
+    return false;
+}
+
+void FileWatcher::initCheck(const QString &filePath)
+{
+    std::ifstream in(filePath.toStdString());
+
+    if (!in.is_open())
+        return;
+
+    std::vector<std::string> lines;
+    std::string line;
+
+    while (std::getline(in, line))
+        lines.push_back(line);
+
+    for (auto it = lines.rbegin(); it != lines.rend(); ++it) {
+        if(testText(*it))
+            return;
+    }
+}
+
 void FileWatcher::addFilePath(const QString &filePath)
 {
+    initCheck(filePath);
+
     QMetaObject::invokeMethod(m_watcher, "addPath", Qt::QueuedConnection,
                               Q_ARG(QString, filePath));
 }
@@ -58,10 +96,5 @@ void FileWatcher::onFileChanged(FileData* fileData)
         return;
     }
 
-    bool ipMatch = std::regex_search(newText, m_match, m_ipRegex);
-
-    if (ipMatch)
-        emit ipFound(m_match[1].str());
-    else if (std::regex_search(newText, m_resetRegex))
-        emit resetFound();
+    testText(newText);
 }

@@ -20,8 +20,19 @@ Window {
     width: pingText.width
 
     Component.onCompleted: {
-        root.bindXY(root.textCorner)
+        if (root.textCorner === TextCorner.Custom) {
+            var savedPoint = Manager.settings.getSavedPosition()
+            root.x = savedPoint.x
+            root.y = savedPoint.y
+        } else {
+            root.bindXY(root.textCorner)
+        }
+
         root.visible = true
+    }
+
+    Component.onDestruction: {
+        Manager.settings.savePosition(Qt.point(root.x, root.y))
     }
 
     onTextCornerChanged: {

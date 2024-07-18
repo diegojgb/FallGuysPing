@@ -156,11 +156,19 @@ void Settings::loadSettings()
     m_fontFamily =m_qSettings.value("FontFamily", "Segoe UI").toString();
 }
 
-// void Settings::saveSettings()
-// {
+void Settings::savePosition(QPoint point)
+{
+    m_qSettings.setValue("CustomX", point.x());
+    m_qSettings.setValue("CustomY", point.y());
+}
 
-//     QSettings settings(FileName, QSettings::IniFormat);
-// }
+QPoint Settings::getSavedPosition()
+{
+    int x = m_qSettings.value("CustomX").toInt();
+    int y = m_qSettings.value("CustomY").toInt();
+
+    return QPoint(x, y);
+}
 
 QString Settings::textCornerToString(TextCorner::Value value)
 {

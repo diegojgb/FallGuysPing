@@ -49,9 +49,11 @@ public:
     void setFontFamily(const QString &newFontFamily);
 
     void loadSettings();
-    // void saveSettings();
     QString textCornerToString(TextCorner::Value value);
     TextCorner::Value textCornerFromString(QString& value);
+
+    Q_INVOKABLE void savePosition(QPoint point);
+    Q_INVOKABLE QPoint getSavedPosition();
 
 signals:
     void startMinimizedChanged();

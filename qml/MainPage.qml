@@ -13,34 +13,27 @@ ColumnLayout {
     Label {
         text: 'App settings'
         font.pointSize: 17
-
-        Behavior on color {
-            ColorAnimation {
-                duration: root.transitionDuration
-            }
-        }
     }
 
-    LabelSeparator {
-        Layout.topMargin: 16
-        text: 'Windows'
-    }
+    // LabelSeparator {
+    //     Layout.topMargin: 16
+    //     text: 'Windows'
+    // }
 
-    ColumnLayout {
-        id: appSettingsCol
-        Layout.topMargin: 10
-        Layout.leftMargin: 20
-        spacing: 10
+    // ColumnLayout {
+    //     id: appSettingsCol
+    //     Layout.topMargin: 10
+    //     Layout.leftMargin: 20
+    //     spacing: 10
 
-        CheckBox {
-            text: "Start app minimized to the system tray."
-        }
+    //     CheckBox {
+    //         text: "Start app minimized to the system tray."
+    //     }
 
-        CheckBox {
-            text: "Sample option."
-        }
-    }
-
+    //     CheckBox {
+    //         text: "Sample option."
+    //     }
+    // }
     LabelSeparator {
         Layout.topMargin: page.sectionTopMargin
         text: 'Position'

@@ -31,7 +31,20 @@ Window {
         root.visible = true
     }
 
+    // For testing purposes.
+    // Timer {
+    //     property int i: 0
+
+    //     interval: 3000
+    //     running: true
+    //     repeat: true
+    //     onTriggered: {
+    //         pingText.text += i.toString()
+    //         i += 1
+    //     }
+    // }
     Component.onDestruction: {
+        pingText.text = 0
         Manager.settings.savePosition(Qt.point(root.x, root.y))
     }
 

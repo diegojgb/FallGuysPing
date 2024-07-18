@@ -141,13 +141,14 @@ ColumnLayout {
                 onCurrentTextChanged: Manager.settings.fontFamily = fontFamilyBox.currentText
             }
 
-            CheckBox {
+            CustomCheckBox {
+                Layout.leftMargin: 5
                 text: "Bold text"
                 checked: Manager.settings.boldText
                 onCheckedChanged: Manager.settings.boldText = checked
             }
 
-            CheckBox {
+            CustomCheckBox {
                 text: "Outlined text"
                 checked: Manager.settings.textOutline
                 onCheckedChanged: Manager.settings.textOutline = checked

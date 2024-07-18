@@ -3,5 +3,6 @@
         <file>assets/ping-icon.ico</file>
         <file>assets/ping-icon.png</file>
         <file>assets/ping-icon-big.png</file>
+        <file>assets/checkmark.png</file>
     </qresource>
 </RCC>

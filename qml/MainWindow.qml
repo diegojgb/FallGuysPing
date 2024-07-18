@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls.Imagine
 import QtQuick.Layouts
 
-ApplicationWindow {
+Window {
     id: root
 
     objectName: "mainWindow"

@@ -89,12 +89,20 @@ void FileWatcher::onFileChanged(FileData* fileData)
     if (!fileData->saveCurTime())
         return;
 
-    std::string newText = Utils::readToEnd(fileData->file);
+    std::string line;
 
-    if (newText == "") { // In case modifications were made, and the cursor is broken.
+    if (!std::getline(fileData->file, line)) { // In case modifications were made, and the cursor is broken.
         fileData->startFile();
         return;
     }
 
-    testText(newText);
+    do {
+        testText(line);
+    }
+    while (std::getline(fileData->file, line));
+
+    if (!fileData->file.eof())
+        Utils::throwError("FileWatcher: error reading file");
+
+    fileData->file.clear();
 }

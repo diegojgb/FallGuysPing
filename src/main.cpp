@@ -7,6 +7,7 @@
 #include <QQmlContext>
 #include <QWindow>
 #include <QStyleFactory>
+#include <QStandardPaths>
 
 // #include <Windows.h>
 
@@ -18,7 +19,10 @@ int main(int argc, char *argv[])
 
     Manager manager;
 
-    manager.addFile("C:/Users/diego/AppData/LocalLow/Mediatonic/FallGuys_client/Player.log");
+    QString path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    path += "Low/Mediatonic/FallGuys_client/Player.log";
+
+    manager.addFile(path);
 
     QQmlApplicationEngine engine;
 

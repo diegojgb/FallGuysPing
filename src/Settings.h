@@ -3,8 +3,10 @@
 
 #include "TextCorner.h"
 
-#include <QObject>
+#include <QApplication>
 #include <QColor>
+#include <QObject>
+#include <QSettings>
 
 class Settings : public QObject
 {
@@ -46,6 +48,11 @@ public:
     QString fontFamily() const;
     void setFontFamily(const QString &newFontFamily);
 
+    void loadSettings();
+    // void saveSettings();
+    QString textCornerToString(TextCorner::Value value);
+    TextCorner::Value textCornerFromString(QString& value);
+
 signals:
     void startMinimizedChanged();
     void draggableTextChanged();
@@ -58,13 +65,15 @@ signals:
 
 private:
     bool m_startMinimized = false;
-    bool m_draggableText = false;
+    bool m_draggableText{};
     TextCorner::Value m_textCorner = TextCorner::Value::TopRight;
-    QColor m_textColor = QColor("#fff");
-    int m_textSize = 14;
-    bool m_textOutline = false;
-    bool m_boldText = true;
-    QString m_fontFamily = "Consolas";
+    QColor m_textColor;
+    int m_textSize{};
+    bool m_textOutline{};
+    bool m_boldText{};
+    QString m_fontFamily;
+    QString m_settingsFile;
+    QSettings m_qSettings;
 };
 
 #endif // SETTINGS_H

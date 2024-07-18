@@ -2,9 +2,14 @@
 
 #include <QDebug>
 
+
+Manager* g_managerInstance = nullptr;
+
 Manager::Manager(QObject *parent)
-    : QObject{parent}
+    : QObject{parent}, m_isGameForeground{isFallGuysForeground()}
 {
+    setForegroundWindowChangeHook();
+
     connect(&m_fileWatcher, &FileWatcher::ipFound, this, &Manager::onIpFound);
     connect(&m_fileWatcher, &FileWatcher::disconnectFound, this, &Manager::onDisconnectFound);
 }
@@ -44,6 +49,42 @@ bool Manager::isProcessRunning(LPCTSTR& processName)
     return exists;
 }
 
+bool Manager::isFallGuysForeground()
+{
+    std::wstring title = getForegroundWindowTitle();
+
+    return title == L"FallGuys_client";
+}
+
+void Manager::setForegroundWindowChangeHook()
+{
+    m_hEventHook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, NULL,
+                                   WinEventProcCallback, 0, 0, WINEVENT_OUTOFCONTEXT | WINEVENT_SKIPOWNPROCESS);
+}
+
+std::wstring Manager::getForegroundWindowTitle()
+{
+    wchar_t wnd_title[256];
+
+    HWND hwnd = GetForegroundWindow();
+    GetWindowText(hwnd, wnd_title, sizeof(wnd_title));
+
+    return wnd_title;
+}
+
+VOID CALLBACK Manager::WinEventProcCallback(HWINEVENTHOOK hWinEventHook,
+                                   DWORD dwEvent,
+                                   HWND hwnd,
+                                   LONG idObject,
+                                   LONG idChild,
+                                   DWORD dwEventThread,
+                                   DWORD dwmsEventTime)
+{
+    if (dwEvent == EVENT_SYSTEM_FOREGROUND) {
+        g_managerInstance->setIsGameForeground(isFallGuysForeground());
+    }
+}
+
 void Manager::onIpFound(const std::string& ip)
 {
     m_pinger.start(ip);
@@ -70,3 +111,17 @@ Settings* Manager::settings()
     return &m_settings;
 }
 
+bool Manager::isGameForeground() const
+{
+    return m_isGameForeground;
+}
+
+void Manager::setIsGameForeground(bool newIsGameForeground)
+{
+    if (m_isGameForeground == newIsGameForeground)
+        return;
+
+    m_isGameForeground = newIsGameForeground;
+
+    emit isGameForegroundChanged();
+}

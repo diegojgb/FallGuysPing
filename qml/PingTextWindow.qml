@@ -28,7 +28,9 @@ Window {
             root.bindXY(root.textCorner)
         }
 
-        root.visible = true
+        root.visible = Qt.binding(function () {
+            return Manager.settings.alwaysVisible || Manager.isGameForeground
+        })
     }
 
     // For testing purposes.

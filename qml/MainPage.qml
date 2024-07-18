@@ -34,8 +34,16 @@ ColumnLayout {
     //         text: "Sample option."
     //     }
     // }
-    LabelSeparator {
+    CusSwitch {
         Layout.topMargin: page.sectionTopMargin
+        text: "Always visible (good for customizing)"
+        checked: Manager.settings.alwaysVisible
+
+        onCheckedChanged: Manager.settings.alwaysVisible = checked
+    }
+
+    LabelSeparator {
+        Layout.topMargin: page.sectionTopMargin - 4
         text: 'Position'
     }
 

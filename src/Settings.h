@@ -20,6 +20,7 @@ class Settings : public QObject
     Q_PROPERTY(bool textOutline READ textOutline WRITE setTextOutline NOTIFY textOutlineChanged FINAL)
     Q_PROPERTY(bool boldText READ boldText WRITE setBoldText NOTIFY boldTextChanged FINAL)
     Q_PROPERTY(QString fontFamily READ fontFamily WRITE setFontFamily NOTIFY fontFamilyChanged FINAL)
+    Q_PROPERTY(bool alwaysVisible READ alwaysVisible WRITE setAlwaysVisible NOTIFY alwaysVisibleChanged FINAL)
 
 public:
     explicit Settings(QObject* parent = nullptr);
@@ -55,6 +56,9 @@ public:
     Q_INVOKABLE void savePosition(QPoint point);
     Q_INVOKABLE QPoint getSavedPosition();
 
+    bool alwaysVisible() const;
+    void setAlwaysVisible(bool newAlwaysVisible);
+
 signals:
     void startMinimizedChanged();
     void draggableTextChanged();
@@ -64,6 +68,7 @@ signals:
     void textOutlineChanged();
     void boldTextChanged();
     void fontFamilyChanged();
+    void alwaysVisibleChanged();
 
 private:
     bool m_startMinimized = false;
@@ -76,6 +81,7 @@ private:
     QString m_fontFamily;
     QString m_settingsFile;
     QSettings m_qSettings;
+    bool m_alwaysVisible{};
 };
 
 #endif // SETTINGS_H

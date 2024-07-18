@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     Manager manager;
+    g_managerInstance = &manager;
 
     QString path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
     path += "Low/Mediatonic/FallGuys_client/Player.log";

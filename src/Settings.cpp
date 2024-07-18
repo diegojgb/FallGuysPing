@@ -153,7 +153,8 @@ void Settings::loadSettings()
     m_textSize = m_qSettings.value("TextSize", 14).toInt();
     m_textOutline = m_qSettings.value("TextOutline", false).toBool();
     m_boldText = m_qSettings.value("BoldText", true).toBool();
-    m_fontFamily =m_qSettings.value("FontFamily", "Segoe UI").toString();
+    m_fontFamily = m_qSettings.value("FontFamily", "Segoe UI").toString();
+    m_alwaysVisible = m_qSettings.value("AlwaysVisible", false).toBool();
 }
 
 void Settings::savePosition(QPoint point)
@@ -200,4 +201,21 @@ TextCorner::Value Settings::textCornerFromString(QString &value)
         return TextCorner::Value::BottomRight;
 
     return TextCorner::Value::Custom;
+}
+
+bool Settings::alwaysVisible() const
+{
+    return m_alwaysVisible;
+}
+
+void Settings::setAlwaysVisible(bool newAlwaysVisible)
+{
+    if (m_alwaysVisible == newAlwaysVisible)
+        return;
+
+    m_alwaysVisible = newAlwaysVisible;
+
+    m_qSettings.setValue("AlwaysVisible", newAlwaysVisible);
+
+    emit alwaysVisibleChanged();
 }

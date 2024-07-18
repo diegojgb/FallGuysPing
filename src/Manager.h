@@ -18,6 +18,7 @@ class Manager : public QObject
 
     Q_PROPERTY(Pinger* pinger READ pinger CONSTANT)
     Q_PROPERTY(Settings* settings READ settings CONSTANT)
+    Q_PROPERTY(bool isGameForeground READ isGameForeground WRITE setIsGameForeground NOTIFY isGameForegroundChanged FINAL)
 
 public:
     explicit Manager(QObject *parent = nullptr);
@@ -28,20 +29,35 @@ public:
     Pinger* pinger();
     Settings* settings();
 
+    bool isGameForeground() const;
+    void setIsGameForeground(bool newIsGameForeground);
+
 public slots:
     void onIpFound(const std::string& ip);
     void onDisconnectFound();
+
+signals:
+    void isGameForegroundChanged();
 
 private:
     FileWatcher m_fileWatcher;
     Pinger m_pinger;
     TrayIcon* m_trayIcon{};
     Settings m_settings;
-    bool m_trayIconInitialized = false;
     HANDLE m_hProcess = NULL;
+    HWINEVENTHOOK m_hEventHook{};
+    bool m_trayIconInitialized = false;
+    bool m_isGameForeground{};
+
+    static VOID CALLBACK WinEventProcCallback (HWINEVENTHOOK hWinEventHook, DWORD dwEvent, HWND hwnd, LONG idObject, LONG idChild, DWORD dwEventThread, DWORD dwmsEventTime);
+    static bool isFallGuysForeground();
+    static std::wstring getForegroundWindowTitle();
 
     bool isFallGuysRunning();
     bool isProcessRunning(LPCTSTR& processName);
+    void setForegroundWindowChangeHook();
 };
+
+extern Manager* g_managerInstance;
 
 #endif // MANAGER_H

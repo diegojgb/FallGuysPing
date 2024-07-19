@@ -67,7 +67,6 @@ ComboBox {
 
         text: control.displayText
         font: control.font
-        color: palette.text
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
         renderType: Text.NativeRendering

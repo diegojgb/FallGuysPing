@@ -1,5 +1,5 @@
 import QtQuick
-import QtQuick.Controls.Imagine
+import QtQuick.Controls
 import QtQuick.Layouts
 
 ApplicationWindow {
@@ -7,9 +7,8 @@ ApplicationWindow {
 
     objectName: "mainWindow"
     width: 650
-    height: 410
-    visible: true
-    palette: lightTheme
+    height: 430
+    visible: false
 
     property color sidebarBgColor: "#e8e8e8"
     property color mainbarBgColor: "#fff"
@@ -26,13 +25,13 @@ ApplicationWindow {
         AboutView
     }
 
+    Component.onCompleted: root.visible = !Manager.settings.startMinimized
+
     Pane {
         anchors.fill: parent
         focusPolicy: Qt.ClickFocus
     }
 
-    // Hide the window instead of closing it when the close button is clicked
-    // @disable-check M16
     onClosing: close => {
                    hide()
                    close.accepted = false
@@ -98,27 +97,5 @@ ApplicationWindow {
                 visible: root.activeView === MainWindow.View.AboutView
             }
         }
-    }
-
-    Palette {
-        id: lightTheme
-        alternateBase: "#fff"
-        base: "#e6e6e6"
-        button: "#eee"
-        buttonText: "#000"
-        dark: "#999"
-        highlight: '#0078d4'
-        highlightedText: "#fff"
-        light: "#fff"
-        mid: "#bbb"
-        midlight: "#ccc"
-        placeholderText: "#80000000"
-        shadow: "#777"
-        text: "#000"
-        window: "#eee"
-        windowText: "#000"
-        accent: "#eee"
-
-        disabled.text: '#737373'
     }
 }

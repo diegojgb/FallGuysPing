@@ -1,5 +1,5 @@
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.Imagine
 
 CheckBox {
     id: control
@@ -29,7 +29,7 @@ CheckBox {
                 return Qt.darker(control.uncheckedColor, 1.2)
 
             if (control.hovered)
-                return Qt.lighter(control.uncheckedColor, 1.2)
+                return Qt.lighter(control.uncheckedColor, 1.1)
 
             return control.uncheckedColor
         }
@@ -39,5 +39,14 @@ CheckBox {
             source: 'qrc:/assets/checkmark.png'
             visible: control.checked
         }
+    }
+
+    contentItem: Text {
+        text: control.text
+        font: control.font
+        opacity: enabled ? 1.0 : 0.3
+        verticalAlignment: Text.AlignVCenter
+        leftPadding: control.indicator.width + control.spacing
+        renderType: Text.NativeRendering
     }
 }

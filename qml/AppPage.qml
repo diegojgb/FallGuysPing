@@ -21,21 +21,21 @@ ColumnLayout {
         id: generalCol
         Layout.topMargin: 10
         Layout.leftMargin: 20
-        spacing: 10
+        spacing: 15
+
+        CustomCheckBox {
+            id: startMinBox
+            text: "Start app minimized to the system tray"
+            spacing: 8
+            checked: Manager.settings.startMinimized
+            onCheckedChanged: Manager.settings.startMinimized = checked
+        }
 
         RowLayout {
             id: intervalRow
 
-            Text {
-                Layout.alignment: Qt.AlignVCenter
-                bottomPadding: 2
-                font.pointSize: 10
-                text: "Ping interval (seconds):"
-            }
-
             FusionSpinBox {
                 id: pingRateBox
-                Layout.leftMargin: 5
                 Layout.preferredWidth: 80
                 stepSize: 1000
                 from: 1000
@@ -61,6 +61,14 @@ ColumnLayout {
                     decimals: 1
                     notation: DoubleValidator.StandardNotation
                 }
+            }
+
+            Text {
+                Layout.leftMargin: 5
+                Layout.alignment: Qt.AlignVCenter
+                bottomPadding: 2
+                text: "Ping interval (seconds)"
+                renderType: Text.NativeRendering
             }
         }
     }

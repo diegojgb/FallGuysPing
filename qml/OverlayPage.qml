@@ -8,7 +8,7 @@ ColumnLayout {
     id: page
 
     property int textCorner: Manager.settings.textCorner
-    property int sectionTopMargin: 20
+    property int sectionTopMargin: 22
 
     Label {
         text: 'App settings'
@@ -75,7 +75,7 @@ ColumnLayout {
 
     ColumnLayout {
         id: textFormatCol
-        Layout.topMargin: 10
+        Layout.topMargin: 12
         Layout.leftMargin: 20
 
         RowLayout {
@@ -84,8 +84,8 @@ ColumnLayout {
             Text {
                 Layout.alignment: Qt.AlignVCenter
                 bottomPadding: 2
-                font.pointSize: 10
                 text: "Text size:"
+                renderType: Text.NativeRendering
             }
 
             FusionSpinBox {
@@ -104,8 +104,8 @@ ColumnLayout {
                 Layout.leftMargin: 16
                 Layout.alignment: Qt.AlignVCenter
                 bottomPadding: 3
-                font.pointSize: 10
                 text: "Text color:"
+                renderType: Text.NativeRendering
             }
 
             ColorPicker {

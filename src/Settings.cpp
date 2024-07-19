@@ -18,6 +18,8 @@ void Settings::setStartMinimized(bool newStartMinimized)
 
     m_startMinimized = newStartMinimized;
 
+    m_qSettings.setValue("StartMinimized", newStartMinimized);
+
     emit startMinimizedChanged();
 }
 
@@ -142,6 +144,7 @@ void Settings::setFontFamily(const QString &newFontFamily)
 
 void Settings::loadSettings()
 {
+    m_startMinimized = m_qSettings.value("StartMinimized", false).toBool();
     m_draggableText = m_qSettings.value("DraggableText", false).toBool();
 
     auto str = m_qSettings.value("TextCorner", "TopRight").toString();

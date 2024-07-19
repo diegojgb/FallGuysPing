@@ -71,6 +71,7 @@ Switch {
         bottomPadding: 2
         text: cusSwitch.text
         font: cusSwitch.font
+        renderType: Text.NativeRendering
     }
 
     MouseArea {

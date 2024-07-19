@@ -9,13 +9,15 @@
 #include <QStyleFactory>
 #include <QStandardPaths>
 
+#include <SingleApplication.h>
+
 // #include <Windows.h>
 
 
 int main(int argc, char *argv[])
 {
     QApplication::setStyle(QStyleFactory::create("Fusion"));
-    QApplication app(argc, argv);
+    SingleApplication app(argc, argv);
 
     Manager manager;
     g_managerInstance = &manager;
@@ -49,6 +51,11 @@ int main(int argc, char *argv[])
     HWND hwnd = (HWND)mainWindow->winId();
 
     manager.initTrayIcon(&app, root, hwnd);
+
+    QObject::connect(&app, &SingleApplication::instanceStarted, mainWindow, &QWindow::showNormal);
+    QObject::connect(&app, &SingleApplication::instanceStarted, [hwnd]() {
+        SetForegroundWindow(hwnd);
+    });
 
     return app.exec();
 }

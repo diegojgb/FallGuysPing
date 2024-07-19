@@ -1,10 +1,24 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.24)
 
-project(FallGuysPing VERSION 0.1 LANGUAGES CXX)
+project(FallGuysPing LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTORCC ON)
 
+include(FetchContent)
+
+set(QT_DEFAULT_MAJOR_VERSION 6 CACHE STRING "Qt version to use, defaults to 6")
+set(QAPPLICATION_CLASS QApplication CACHE STRING "Inheritance class for SingleApplication")
+
+FetchContent_Declare(
+    SingleApplication
+    GIT_REPOSITORY https://github.com/itay-grudev/SingleApplication.git
+    GIT_TAG        8c48163c4d3fbba603cfe8a5b94046c9dad71825
+)
+
+FetchContent_MakeAvailable(SingleApplication)
+
+find_package(SingleApplication)
 find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Widgets)
 
 qt_standard_project_setup()
@@ -67,10 +81,6 @@ qt_add_qml_module(appFallGuysPing
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
 set_target_properties(appFallGuysPing PROPERTIES
-#    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appFallGuysPing
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
     OUTPUT_NAME "FallGuysPing"
 )
@@ -79,11 +89,13 @@ target_sources(appFallGuysPing PRIVATE
     ${SOURCE_FILES}
 )
 
-target_link_libraries(appFallGuysPing
-    PRIVATE Qt6::Quick
-    PRIVATE Qt6::Widgets
-    PRIVATE Iphlpapi
-    PRIVATE Ws2_32
+target_link_libraries(appFallGuysPing PRIVATE
+    Qt6::Quick
+    Qt6::Widgets
+    Iphlpapi
+    Ws2_32
+
+    SingleApplication::SingleApplication
 )
 
 include(GNUInstallDirs)

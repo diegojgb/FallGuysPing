@@ -9,14 +9,13 @@ find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Widgets)
 
 qt_standard_project_setup()
 
-set(app_icon_resource "${CMAKE_CURRENT_SOURCE_DIR}/assets/fallguysping.rc")
-
 include_directories(src)
 
 qt_add_executable(appFallGuysPing
     src/main.cpp
     assets.qrc
-    ${app_icon_resource}
+    assets/fallguysping.rc  # icon resource.
+    assets/version.rc
 )
 
 qt_policy(SET QTP0001 NEW)

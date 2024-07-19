@@ -50,8 +50,5 @@ int main(int argc, char *argv[])
 
     manager.initTrayIcon(&app, root, hwnd);
 
-    // auto pingTextWindow = (HWND)qobject_cast<QWindow*>(engine.rootObjects().at(1))->winId();
-    // SetWindowPos(pingTextWindow, ((HWND)-1), 0, 0, 50, 50, 0);
-
     return app.exec();
 }

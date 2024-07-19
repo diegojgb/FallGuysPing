@@ -11,29 +11,10 @@ ColumnLayout {
     property int sectionTopMargin: 22
 
     Label {
-        text: 'App settings'
+        text: 'Overlay settings'
         font.pointSize: 17
     }
 
-    // LabelSeparator {
-    //     Layout.topMargin: 16
-    //     text: 'Windows'
-    // }
-
-    // ColumnLayout {
-    //     id: appSettingsCol
-    //     Layout.topMargin: 10
-    //     Layout.leftMargin: 20
-    //     spacing: 10
-
-    //     CheckBox {
-    //         text: "Start app minimized to the system tray."
-    //     }
-
-    //     CheckBox {
-    //         text: "Sample option."
-    //     }
-    // }
     CusSwitch {
         Layout.topMargin: page.sectionTopMargin
         text: "Always visible"

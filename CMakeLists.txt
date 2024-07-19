@@ -30,7 +30,7 @@ qt_add_qml_module(appFallGuysPing
         qml/PingTextWindow.qml
         qml/Sidebar.qml
         qml/Tab.qml
-        qml/MainPage.qml
+        qml/OverlayPage.qml
         qml/LabelSeparator.qml
         qml/AboutPage.qml
         qml/SquareRadioButton.qml
@@ -40,6 +40,7 @@ qt_add_qml_module(appFallGuysPing
         qml/ColorPicker.qml
         qml/CustomComboBox.qml
         qml/CustomCheckBox.qml
+        qml/AppPage.qml
 
     SOURCES
         src/DashedRectangle.h

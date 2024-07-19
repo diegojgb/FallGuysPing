@@ -4,9 +4,7 @@ Settings::Settings(QObject* parent)
     : QObject{parent},
       m_settingsFile{QApplication::applicationDirPath() + "/config.ini"},
       m_qSettings{QSettings(m_settingsFile, QSettings::IniFormat)}
-{
-    loadSettings();
-}
+{}
 
 bool Settings::startMinimized() const
 {
@@ -155,6 +153,8 @@ void Settings::loadSettings()
     m_boldText = m_qSettings.value("BoldText", true).toBool();
     m_fontFamily = m_qSettings.value("FontFamily", "Segoe UI").toString();
     m_alwaysVisible = m_qSettings.value("AlwaysVisible", false).toBool();
+
+    setPingInterval(m_qSettings.value("PingInterval", 3000).toInt()); // Setter needs to be called for Pinger/PingWorker to update.
 }
 
 void Settings::savePosition(QPoint point)
@@ -218,4 +218,22 @@ void Settings::setAlwaysVisible(bool newAlwaysVisible)
     m_qSettings.setValue("AlwaysVisible", newAlwaysVisible);
 
     emit alwaysVisibleChanged();
+}
+
+int Settings::pingInterval() const
+{
+    return m_pingInterval;
+}
+
+void Settings::setPingInterval(int newPingInterval)
+{
+    if (m_pingInterval == newPingInterval)
+        return;
+
+    m_pingInterval = newPingInterval;
+
+    emit pingIntervalChangedOverload(newPingInterval);
+    m_qSettings.setValue("PingInterval", newPingInterval);
+
+    emit pingIntervalChanged();
 }

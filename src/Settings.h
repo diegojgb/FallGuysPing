@@ -21,6 +21,7 @@ class Settings : public QObject
     Q_PROPERTY(bool boldText READ boldText WRITE setBoldText NOTIFY boldTextChanged FINAL)
     Q_PROPERTY(QString fontFamily READ fontFamily WRITE setFontFamily NOTIFY fontFamilyChanged FINAL)
     Q_PROPERTY(bool alwaysVisible READ alwaysVisible WRITE setAlwaysVisible NOTIFY alwaysVisibleChanged FINAL)
+    Q_PROPERTY(int pingInterval READ pingInterval WRITE setPingInterval NOTIFY pingIntervalChanged FINAL)
 
 public:
     explicit Settings(QObject* parent = nullptr);
@@ -59,6 +60,9 @@ public:
     bool alwaysVisible() const;
     void setAlwaysVisible(bool newAlwaysVisible);
 
+    int pingInterval() const;
+    void setPingInterval(int newPingInterval);
+
 signals:
     void startMinimizedChanged();
     void draggableTextChanged();
@@ -69,6 +73,9 @@ signals:
     void boldTextChanged();
     void fontFamilyChanged();
     void alwaysVisibleChanged();
+    void pingIntervalChanged();
+
+    void pingIntervalChangedOverload(int interval);
 
 private:
     bool m_startMinimized = false;
@@ -82,6 +89,7 @@ private:
     QString m_settingsFile;
     QSettings m_qSettings;
     bool m_alwaysVisible{};
+    int m_pingInterval;
 };
 
 #endif // SETTINGS_H

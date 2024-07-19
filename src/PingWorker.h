@@ -20,10 +20,12 @@ public:
     explicit PingWorker(QObject* parent = nullptr);
     ~PingWorker();
 
-    Q_INVOKABLE void stop();
+    Q_INVOKABLE void stopIp();
+    Q_INVOKABLE int pingInterval() const;
+    Q_INVOKABLE void setPingInterval(int interval);
 
 public slots:
-    void start(const std::string& ip);
+    void startIp(const std::string& ip);
     void finish();
 
 signals:
@@ -41,8 +43,11 @@ private:
     std::string m_ipStr;
 
     int m_timer{};
-    int m_pollingRate = 2000;
+    int m_pingInterval = 3000;
     bool m_running = false;
+    void start();
+    void stop();
+    void restart();
 
     void timerEvent(QTimerEvent* event) override;
 

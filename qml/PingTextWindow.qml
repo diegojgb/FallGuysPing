@@ -46,8 +46,10 @@ Window {
     //     }
     // }
     Component.onDestruction: {
-        pingText.text = 0
-        Manager.settings.savePosition(Qt.point(root.x, root.y))
+        if (root.textCorner === TextCorner.Custom) {
+            pingText.text = 0
+            Manager.settings.savePosition(Qt.point(root.x, root.y))
+        }
     }
 
     onTextCornerChanged: {

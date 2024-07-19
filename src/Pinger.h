@@ -25,6 +25,7 @@ public:
 
 public slots:
     void onPinged(const QString& latency);
+    void onPingIntervalChanged(int interval);
 
 signals:
     void latestPingChanged();

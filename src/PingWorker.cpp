@@ -15,16 +15,10 @@ PingWorker::~PingWorker()
     IcmpCloseHandle(m_icmpHandle);
 }
 
-void PingWorker::start(const std::string& ip)
+void PingWorker::start()
 {
-    m_ipStr = ip;
-
-    if (InetPtonA(AF_INET, m_ipStr.c_str(), &m_ip) != 1) {
-        throw;
-    }
-
     if (!m_running) {
-        m_timer = startTimer(m_pollingRate);
+        m_timer = startTimer(m_pingInterval);
         m_running = true;
     }
 }
@@ -35,8 +29,49 @@ void PingWorker::stop()
         killTimer(m_timer);
         m_running = false;
     }
+}
+
+void PingWorker::restart()
+{
+    if (m_running) {
+        stop();
+        start();
+    }
+}
+
+void PingWorker::startIp(const std::string& ip)
+{
+    m_ipStr = ip;
+
+    if (InetPtonA(AF_INET, m_ipStr.c_str(), &m_ip) != 1) {
+        throw;
+    }
+
+    emit pinged(ping());
+
+    start();
+}
+
+void PingWorker::stopIp()
+{
+    stop();
 
     emit pinged("0");
+}
+
+int PingWorker::pingInterval() const
+{
+    return m_pingInterval;
+}
+
+void PingWorker::setPingInterval(int interval)
+{
+    if (m_pingInterval == interval)
+        return;
+
+    m_pingInterval = interval;
+
+    restart();
 }
 
 void PingWorker::finish()

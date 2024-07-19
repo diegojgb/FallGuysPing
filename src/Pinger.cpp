@@ -20,13 +20,13 @@ Pinger::Pinger(QObject *parent)
 
 void Pinger::start(const std::string& ip)
 {
-    QMetaObject::invokeMethod(m_worker, "start", Qt::QueuedConnection,
+    QMetaObject::invokeMethod(m_worker, "startIp", Qt::QueuedConnection,
                               Q_ARG(std::string, ip));
 }
 
 void Pinger::stop()
 {
-    QMetaObject::invokeMethod(m_worker, "stop", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(m_worker, "stopIp", Qt::QueuedConnection);
 }
 
 QString Pinger::latestPing() const
@@ -47,4 +47,10 @@ void Pinger::setLatestPing(const QString& newLatestPing)
 void Pinger::onPinged(const QString& latency)
 {
     setLatestPing(latency);
+}
+
+void Pinger::onPingIntervalChanged(int interval)
+{
+    QMetaObject::invokeMethod(m_worker, "setPingInterval", Qt::QueuedConnection,
+                              Q_ARG(int, interval));
 }

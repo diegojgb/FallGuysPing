@@ -20,7 +20,7 @@ ColumnLayout {
                 font.weight: Font.DemiBold
             }
             Label {
-                text: 'Version 1.1.0-dev.1'
+                text: 'Version 1.1.0'
                 font.pointSize: 12
             }
         }

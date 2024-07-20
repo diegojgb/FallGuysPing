@@ -11,4 +11,19 @@ SpinBox {
     Keys.onEnterPressed: {
         control.focus = false
     }
+
+    contentItem: TextInput {
+        z: 2
+        text: control.textFromValue(control.value, control.locale)
+
+        font: control.font
+        selectionColor: root.selectionColor
+        selectedTextColor: "#fff"
+        horizontalAlignment: Qt.AlignHCenter
+        verticalAlignment: Qt.AlignVCenter
+        renderType: Text.NativeRendering
+        readOnly: !control.editable
+        validator: control.validator
+        inputMethodHints: Qt.ImhFormattedNumbersOnly
+    }
 }

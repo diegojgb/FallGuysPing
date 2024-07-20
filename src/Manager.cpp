@@ -13,6 +13,7 @@ Manager::Manager(QObject *parent)
     connect(&m_fileWatcher, &FileWatcher::ipFound, this, &Manager::onIpFound);
     connect(&m_fileWatcher, &FileWatcher::disconnectFound, this, &Manager::onDisconnectFound);
     connect(&m_settings, &Settings::pingIntervalChangedOverload, &m_pinger, &Pinger::onPingIntervalChanged);
+    connect(&m_settings, &Settings::quitOnGameExitChangedOverload, &m_fileWatcher, &FileWatcher::setQuitOnGameExit);
 
     m_settings.loadSettings();
 }

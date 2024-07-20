@@ -5,6 +5,7 @@ FileWatcher::FileWatcher(QObject* parent)
     : QObject{parent},
       m_ipRegex{std::regex(R"(\[StateConnectToGame\] We're connected to the server! Host = ([0-9.]+))")},
       m_resetRegex{std::regex(R"(\[EAC Client\] DisconnectFromGameServer)")},
+      m_exitRegex{std::regex(R"(\[GlobalGameStateClient\] OnDestroy called)")},
       m_watcher{new FileChangeWorker()},
       m_thread{new QThread(this)}
 {
@@ -33,7 +34,15 @@ void FileWatcher::changeFilePath(const QString& oldKey, const QString& newKey)
     addFilePath(newKey);
 }
 
-bool FileWatcher::testText(std::string& text)
+void FileWatcher::setQuitOnGameExit(bool newValue)
+{
+    if (m_quitOnGameExit == newValue)
+        return;
+
+    m_quitOnGameExit = newValue;
+}
+
+bool FileWatcher::matchServerInfo(std::string& text)
 {
     bool ipMatch = std::regex_search(text, m_match, m_ipRegex);
 
@@ -44,6 +53,16 @@ bool FileWatcher::testText(std::string& text)
 
     if (std::regex_search(text, m_resetRegex)) {
         emit disconnectFound();
+        return true;
+    }
+
+    return false;
+}
+
+bool FileWatcher::matchGameExit(std::string &text)
+{
+    if (std::regex_search(text, m_exitRegex)) {
+        qApp->exit();
         return true;
     }
 
@@ -64,7 +83,7 @@ void FileWatcher::initCheck(const QString &filePath)
         lines.push_back(line);
 
     for (auto it = lines.rbegin(); it != lines.rend(); ++it) {
-        if(testText(*it))
+        if(matchServerInfo(*it))
             return;
     }
 }
@@ -97,7 +116,10 @@ void FileWatcher::onFileChanged(FileData* fileData)
     }
 
     do {
-        testText(line);
+        matchServerInfo(line);
+
+        if (m_quitOnGameExit)
+            matchGameExit(line);
     }
     while (std::getline(fileData->file, line));
 

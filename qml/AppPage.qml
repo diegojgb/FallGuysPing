@@ -5,7 +5,7 @@ import QtQuick.Controls
 ColumnLayout {
     id: page
 
-    property int sectionTopMargin: 20
+    property int sectionTopMargin: 22
 
     Label {
         text: 'App settings'
@@ -13,7 +13,7 @@ ColumnLayout {
     }
 
     LabelSeparator {
-        Layout.topMargin: 16
+        Layout.topMargin: page.sectionTopMargin - 4
         text: 'General'
     }
 
@@ -22,14 +22,6 @@ ColumnLayout {
         Layout.topMargin: 10
         Layout.leftMargin: 20
         spacing: 15
-
-        CustomCheckBox {
-            id: startMinBox
-            text: "Start app minimized to the system tray"
-            spacing: 8
-            checked: Manager.settings.startMinimized
-            onCheckedChanged: Manager.settings.startMinimized = checked
-        }
 
         RowLayout {
             id: intervalRow
@@ -70,6 +62,34 @@ ColumnLayout {
                 text: "Ping interval (seconds)"
                 renderType: Text.NativeRendering
             }
+        }
+    }
+
+    LabelSeparator {
+        Layout.topMargin: page.sectionTopMargin
+        text: 'Windows'
+    }
+
+    ColumnLayout {
+        id: windowsCol
+        Layout.topMargin: 10
+        Layout.leftMargin: 20
+        spacing: 10
+
+        CustomCheckBox {
+            id: startMinBox
+            text: "Start app minimized to the system tray"
+            spacing: 8
+            checked: Manager.settings.startMinimized
+            onCheckedChanged: Manager.settings.startMinimized = checked
+        }
+
+        CustomCheckBox {
+            id: quitOnGameExit
+            text: "Close app on Fall Guys exit"
+            spacing: 8
+            checked: Manager.settings.quitOnGameExit
+            onCheckedChanged: Manager.settings.quitOnGameExit = checked
         }
     }
 }

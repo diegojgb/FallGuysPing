@@ -22,6 +22,7 @@ class Settings : public QObject
     Q_PROPERTY(QString fontFamily READ fontFamily WRITE setFontFamily NOTIFY fontFamilyChanged FINAL)
     Q_PROPERTY(bool alwaysVisible READ alwaysVisible WRITE setAlwaysVisible NOTIFY alwaysVisibleChanged FINAL)
     Q_PROPERTY(int pingInterval READ pingInterval WRITE setPingInterval NOTIFY pingIntervalChanged FINAL)
+    Q_PROPERTY(bool quitOnGameExit READ quitOnGameExit WRITE setQuitOnGameExit NOTIFY quitOnGameExitChanged FINAL)
 
 public:
     explicit Settings(QObject* parent = nullptr);
@@ -54,14 +55,17 @@ public:
     QString textCornerToString(TextCorner::Value value);
     TextCorner::Value textCornerFromString(QString& value);
 
-    Q_INVOKABLE void savePosition(QPoint point);
-    Q_INVOKABLE QPoint getSavedPosition();
-
     bool alwaysVisible() const;
     void setAlwaysVisible(bool newAlwaysVisible);
 
     int pingInterval() const;
     void setPingInterval(int newPingInterval);
+
+    bool quitOnGameExit() const;
+    void setQuitOnGameExit(bool newQuitOnGameExit);
+
+    Q_INVOKABLE void savePosition(QPoint point);
+    Q_INVOKABLE QPoint getSavedPosition();
 
 signals:
     void startMinimizedChanged();
@@ -74,6 +78,8 @@ signals:
     void fontFamilyChanged();
     void alwaysVisibleChanged();
     void pingIntervalChanged();
+    void quitOnGameExitChanged();
+    void quitOnGameExitChangedOverload(bool value);
 
     void pingIntervalChangedOverload(int interval);
 
@@ -90,6 +96,7 @@ private:
     QSettings m_qSettings;
     bool m_alwaysVisible{};
     int m_pingInterval;
+    bool m_quitOnGameExit;
 };
 
 #endif // SETTINGS_H

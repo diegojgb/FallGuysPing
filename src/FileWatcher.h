@@ -31,6 +31,7 @@ public:
 public slots:
     void onFileChanged(FileData* fileData);
     void changeFilePath(const QString &oldKey, const QString &newKey);
+    void setQuitOnGameExit(bool newValue);
 
 signals:
     void ipFound(const std::string& ip);
@@ -42,9 +43,12 @@ private:
     FileChangeWorker* m_watcher{};
     std::regex m_ipRegex;
     std::regex m_resetRegex;
+    std::regex m_exitRegex;
     std::smatch m_match;
+    bool m_quitOnGameExit = false;
 
-    bool testText(std::string& text);
+    bool matchServerInfo(std::string &text);
+    bool matchGameExit(std::string &text);
     void initCheck(const QString &filePath);
 };
 

@@ -158,6 +158,7 @@ void Settings::loadSettings()
     m_alwaysVisible = m_qSettings.value("AlwaysVisible", false).toBool();
 
     setPingInterval(m_qSettings.value("PingInterval", 3000).toInt()); // Setter needs to be called for Pinger/PingWorker to update.
+    setQuitOnGameExit(m_qSettings.value("QuitOnGameExit", false).toBool()); // Setter needs to be called for FileWatcher to update.
 }
 
 void Settings::savePosition(QPoint point)
@@ -239,4 +240,22 @@ void Settings::setPingInterval(int newPingInterval)
     m_qSettings.setValue("PingInterval", newPingInterval);
 
     emit pingIntervalChanged();
+}
+
+bool Settings::quitOnGameExit() const
+{
+    return m_quitOnGameExit;
+}
+
+void Settings::setQuitOnGameExit(bool newQuitOnGameExit)
+{
+    if (m_quitOnGameExit == newQuitOnGameExit)
+        return;
+
+    m_quitOnGameExit = newQuitOnGameExit;
+
+    emit quitOnGameExitChangedOverload(newQuitOnGameExit);
+    m_qSettings.setValue("QuitOnGameExit", newQuitOnGameExit);
+
+    emit quitOnGameExitChanged();
 }

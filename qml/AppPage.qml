@@ -86,7 +86,7 @@ ColumnLayout {
 
         CustomCheckBox {
             id: quitOnGameExit
-            text: "Close app on Fall Guys exit"
+            text: "Close app on game exit"
             spacing: 8
             checked: Manager.settings.quitOnGameExit
             onCheckedChanged: Manager.settings.quitOnGameExit = checked

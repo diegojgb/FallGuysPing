@@ -18,10 +18,16 @@ class Manager : public QObject
 
     Q_PROPERTY(Pinger* pinger READ pinger CONSTANT)
     Q_PROPERTY(Settings* settings READ settings CONSTANT)
-    Q_PROPERTY(bool isGameForeground READ isGameForeground WRITE setIsGameForeground NOTIFY isGameForegroundChanged FINAL)
+    Q_PROPERTY(bool isGameActive READ isGameActive WRITE setIsGameActive NOTIFY isGameActiveChanged FINAL)
 
 public:
-    explicit Manager(QObject *parent = nullptr);
+    enum WindowMode {
+        Focus,
+        Foreground,
+        Both
+    };
+
+    explicit Manager(QObject *parent, WindowMode windowMode);
 
     void addFile(const QString &filePath);
     void initTrayIcon(QObject* parent, QObject* root, HWND& hwnd);
@@ -29,15 +35,15 @@ public:
     Pinger* pinger();
     Settings* settings();
 
-    bool isGameForeground() const;
-    void setIsGameForeground(bool newIsGameForeground);
+    bool isGameActive() const;
+    void setIsGameActive(bool newIsGameActive);
 
 public slots:
     void onIpFound(const std::string& ip);
     void onDisconnectFound();
 
 signals:
-    void isGameForegroundChanged();
+    void isGameActiveChanged();
 
 private:
     FileWatcher m_fileWatcher;
@@ -45,16 +51,19 @@ private:
     TrayIcon* m_trayIcon{};
     Settings m_settings;
     HANDLE m_hProcess = NULL;
-    HWINEVENTHOOK m_hEventHook{};
+    HWINEVENTHOOK m_hEventHookFocus{};
+    HWINEVENTHOOK m_hEventHookForeground{};
     bool m_trayIconInitialized = false;
-    bool m_isGameForeground{};
+    bool m_isGameActive{};
+    WindowMode m_windowMode;
 
-    static VOID CALLBACK WinEventProcCallback (HWINEVENTHOOK hWinEventHook, DWORD dwEvent, HWND hwnd, LONG idObject, LONG idChild, DWORD dwEventThread, DWORD dwmsEventTime);
-    static bool isFallGuysForeground();
-    static std::wstring getForegroundWindowTitle();
+    static VOID CALLBACK WinFocusCallback (HWINEVENTHOOK hWinEventHook, DWORD dwEvent, HWND hwnd, LONG idObject, LONG idChild, DWORD dwEventThread, DWORD dwmsEventTime);
+    static VOID CALLBACK WinForegroundCallback (HWINEVENTHOOK hWinEventHook, DWORD dwEvent, HWND hwnd, LONG idObject, LONG idChild, DWORD dwEventThread, DWORD dwmsEventTime);
 
-    bool isFallGuysRunning();
+    bool isGameActiveCheck(WindowMode mode);
+    bool isGameRunning();
     bool isProcessRunning(LPCTSTR& processName);
+    void setFocusedWindowChangeHook();
     void setForegroundWindowChangeHook();
 };
 

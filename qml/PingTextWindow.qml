@@ -29,7 +29,7 @@ Window {
         }
 
         root.visible = Qt.binding(function () {
-            return Manager.settings.alwaysVisible || Manager.isGameForeground
+            return Manager.settings.alwaysVisible || Manager.isGameActive
         })
     }
 

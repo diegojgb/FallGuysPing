@@ -2,13 +2,22 @@
 
 #include <QDebug>
 
+namespace {
+    const wchar_t* const GAME_TITLE = L"FallGuys_client";
+}
 
 Manager* g_managerInstance = nullptr;
 
-Manager::Manager(QObject *parent)
-    : QObject{parent}, m_isGameForeground{isFallGuysForeground()}
+Manager::Manager(QObject *parent, WindowMode windowMode)
+    : QObject{parent},
+      m_isGameActive{isGameActiveCheck(windowMode)},
+      m_windowMode{windowMode}
 {
-    setForegroundWindowChangeHook();
+    if (windowMode != WindowMode::Foreground)
+        setFocusedWindowChangeHook();
+
+    if (windowMode != WindowMode::Focus)
+        setForegroundWindowChangeHook();
 
     connect(&m_fileWatcher, &FileWatcher::ipFound, this, &Manager::onIpFound);
     connect(&m_fileWatcher, &FileWatcher::disconnectFound, this, &Manager::onDisconnectFound);
@@ -53,30 +62,50 @@ bool Manager::isProcessRunning(LPCTSTR& processName)
     return exists;
 }
 
-bool Manager::isFallGuysForeground()
+bool Manager::isGameActiveCheck(WindowMode mode)
 {
-    std::wstring title = getForegroundWindowTitle();
+    wchar_t wnd_title[256];
+    bool isForeground = false;
+    bool isFocused = false;
+    
+    if (mode != WindowMode::Foreground) {
+        HWND focusHwnd = GetFocus();
+        GetWindowText(focusHwnd, wnd_title, sizeof(wnd_title));
+        isFocused = wcscmp(wnd_title, GAME_TITLE) == 0;
+    }
 
-    return title == L"FallGuys_client";
+    if (mode != WindowMode::Focus) {
+        HWND foregroundHwnd = GetForegroundWindow();
+        GetWindowText(foregroundHwnd, wnd_title, sizeof(wnd_title));
+        isForeground = wcscmp(wnd_title, GAME_TITLE) == 0;
+    }
+
+    return isFocused || isForeground;
+}
+
+void Manager::setFocusedWindowChangeHook()
+{
+    m_hEventHookFocus = SetWinEventHook(EVENT_OBJECT_FOCUS,
+                                   EVENT_OBJECT_FOCUS,
+                                   NULL,
+                                   WinFocusCallback,
+                                   0,
+                                   0,
+                                   WINEVENT_OUTOFCONTEXT | WINEVENT_SKIPOWNPROCESS);
 }
 
 void Manager::setForegroundWindowChangeHook()
 {
-    m_hEventHook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, NULL,
-                                   WinEventProcCallback, 0, 0, WINEVENT_OUTOFCONTEXT | WINEVENT_SKIPOWNPROCESS);
+    m_hEventHookForeground = SetWinEventHook(EVENT_SYSTEM_FOREGROUND,
+                                        EVENT_SYSTEM_FOREGROUND,
+                                        NULL,
+                                        WinForegroundCallback,
+                                        0,
+                                        0,
+                                        WINEVENT_OUTOFCONTEXT | WINEVENT_SKIPOWNPROCESS);
 }
 
-std::wstring Manager::getForegroundWindowTitle()
-{
-    wchar_t wnd_title[256];
-
-    HWND hwnd = GetForegroundWindow();
-    GetWindowText(hwnd, wnd_title, sizeof(wnd_title));
-
-    return wnd_title;
-}
-
-VOID CALLBACK Manager::WinEventProcCallback(HWINEVENTHOOK hWinEventHook,
+VOID CALLBACK Manager::WinFocusCallback(HWINEVENTHOOK hWinEventHook,
                                    DWORD dwEvent,
                                    HWND hwnd,
                                    LONG idObject,
@@ -84,8 +113,31 @@ VOID CALLBACK Manager::WinEventProcCallback(HWINEVENTHOOK hWinEventHook,
                                    DWORD dwEventThread,
                                    DWORD dwmsEventTime)
 {
+    if (dwEvent == EVENT_OBJECT_FOCUS) {
+        wchar_t windowTitle[256];
+        GetWindowText(hwnd, windowTitle, sizeof(windowTitle));
+
+        bool isGameFocused = wcscmp(windowTitle, GAME_TITLE) == 0;
+
+        g_managerInstance->setIsGameActive(isGameFocused);
+    }
+}
+
+void Manager::WinForegroundCallback(HWINEVENTHOOK hWinEventHook,
+                                    DWORD dwEvent,
+                                    HWND hwnd,
+                                    LONG idObject,
+                                    LONG idChild,
+                                    DWORD dwEventThread,
+                                    DWORD dwmsEventTime)
+{
     if (dwEvent == EVENT_SYSTEM_FOREGROUND) {
-        g_managerInstance->setIsGameForeground(isFallGuysForeground());
+        wchar_t windowTitle[256];
+        GetWindowText(hwnd, windowTitle, sizeof(windowTitle));
+
+        bool isGameForeground = wcscmp(windowTitle, GAME_TITLE) == 0;
+
+        g_managerInstance->setIsGameActive(isGameForeground);
     }
 }
 
@@ -99,7 +151,7 @@ void Manager::onDisconnectFound()
     m_pinger.stop();
 }
 
-bool Manager::isFallGuysRunning()
+bool Manager::isGameRunning()
 {
     LPCTSTR processName = TEXT("FallGuys_client_game.exe");
     return isProcessRunning(processName);
@@ -115,17 +167,17 @@ Settings* Manager::settings()
     return &m_settings;
 }
 
-bool Manager::isGameForeground() const
+bool Manager::isGameActive() const
 {
-    return m_isGameForeground;
+    return m_isGameActive;
 }
 
-void Manager::setIsGameForeground(bool newIsGameForeground)
+void Manager::setIsGameActive(bool newIsGameActive)
 {
-    if (m_isGameForeground == newIsGameForeground)
+    if (m_isGameActive == newIsGameActive)
         return;
 
-    m_isGameForeground = newIsGameForeground;
+    m_isGameActive = newIsGameActive;
 
-    emit isGameForegroundChanged();
+    emit isGameActiveChanged();
 }

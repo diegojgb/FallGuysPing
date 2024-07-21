@@ -6,7 +6,9 @@ PingWorker::PingWorker(QObject *parent)
       m_icmpHandle{IcmpCreateFile()}
 {
     if (m_icmpHandle == INVALID_HANDLE_VALUE) {
-        throw;
+        DWORD error = GetLastError();
+        std::string errorMessage = "Failed to create ICMP file handle. Error code: " + std::to_string(error);
+        throw std::runtime_error(errorMessage);
     }
 }
 
@@ -44,7 +46,9 @@ void PingWorker::startIp(const std::string& ip)
     m_ipStr = ip;
 
     if (InetPtonA(AF_INET, m_ipStr.c_str(), &m_ip) != 1) {
-        throw;
+        int error = WSAGetLastError();
+        std::string errorMessage = "Failed to convert IP address string to binary form. Error code: " + std::to_string(error);
+        throw std::runtime_error(errorMessage);
     }
 
     emit pinged(ping());

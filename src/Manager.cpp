@@ -1,6 +1,5 @@
 #include "Manager.h"
 
-#include <QDebug>
 
 namespace {
     const wchar_t* const GAME_TITLE = L"FallGuys_client";

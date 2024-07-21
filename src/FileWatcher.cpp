@@ -71,7 +71,7 @@ bool FileWatcher::matchGameExit(std::string &text)
 
 void FileWatcher::initCheck(const QString &filePath)
 {
-    std::ifstream in(filePath.toStdString());
+    std::ifstream in(filePath.toStdWString());
 
     if (!in.is_open())
         return;

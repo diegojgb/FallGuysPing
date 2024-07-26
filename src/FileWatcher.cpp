@@ -124,7 +124,7 @@ void FileWatcher::onFileChanged(FileData* fileData)
     while (std::getline(fileData->file, line));
 
     if (!fileData->file.eof())
-        Utils::throwError("FileWatcher: error reading file");
+        Utils::errorExit("FileWatcher: error reading file");
 
     fileData->file.clear();
 }

@@ -34,7 +34,7 @@ void Manager::addFile(const QString& filePath)
 void Manager::initTrayIcon(QObject* parent, QObject* root, HWND& hwnd)
 {
     if (m_trayIconInitialized)
-        Utils::throwError("Tray icon can only be initialized once.");
+        Utils::errorExit("Tray icon can only be initialized once.");
 
     m_trayIcon = new TrayIcon(parent, root, hwnd);
 

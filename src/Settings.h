@@ -51,10 +51,6 @@ public:
     QString fontFamily() const;
     void setFontFamily(const QString &newFontFamily);
 
-    void loadSettings();
-    QString textCornerToString(TextCorner::Value value);
-    TextCorner::Value textCornerFromString(QString& value);
-
     bool alwaysVisible() const;
     void setAlwaysVisible(bool newAlwaysVisible);
 
@@ -63,6 +59,10 @@ public:
 
     bool quitOnGameExit() const;
     void setQuitOnGameExit(bool newQuitOnGameExit);
+
+    void loadSettings();
+    QString textCornerToString(TextCorner::Value value);
+    TextCorner::Value textCornerFromString(QString& value);
 
     Q_INVOKABLE void savePosition(QPoint point);
     Q_INVOKABLE QPoint getSavedPosition();
@@ -79,8 +79,8 @@ signals:
     void alwaysVisibleChanged();
     void pingIntervalChanged();
     void quitOnGameExitChanged();
-    void quitOnGameExitChangedOverload(bool value);
 
+    void quitOnGameExitChangedOverload(bool value);
     void pingIntervalChangedOverload(int interval);
 
 private:
@@ -95,8 +95,8 @@ private:
     QString m_settingsFile;
     QSettings m_qSettings;
     bool m_alwaysVisible{};
-    int m_pingInterval;
-    bool m_quitOnGameExit;
+    int m_pingInterval{};
+    bool m_quitOnGameExit{};
 };
 
 #endif // SETTINGS_H

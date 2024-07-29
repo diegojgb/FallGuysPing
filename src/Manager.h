@@ -12,6 +12,7 @@
 #include <tlhelp32.h>
 #include <tchar.h>
 
+
 class Manager : public QObject
 {
     Q_OBJECT

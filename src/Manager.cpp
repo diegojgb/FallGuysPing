@@ -31,14 +31,12 @@ void Manager::addFile(const QString& filePath)
     m_fileWatcher.addFilePath(filePath);
 }
 
-void Manager::initTrayIcon(QObject* parent, QObject* root, HWND& hwnd)
+void Manager::initTrayIcon(QObject *parent, QQuickWindow *rootWindow)
 {
-    if (m_trayIconInitialized)
-        Utils::errorExit("Tray icon can only be initialized once.");
+    if (m_trayIcon != nullptr)
+        Utils::errorExit("[Manager]: Tray icon can only be initialized once.");
 
-    m_trayIcon = new TrayIcon(parent, root, hwnd);
-
-    m_trayIconInitialized = true;
+    m_trayIcon = new TrayIcon(parent, rootWindow);
 }
 
 bool Manager::isProcessRunning(LPCTSTR& processName)

@@ -23,6 +23,8 @@ find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Widgets)
 
 qt_standard_project_setup()
 
+add_subdirectory(WinToast)
+
 include_directories(src)
 
 qt_add_executable(appFallGuysPing
@@ -75,6 +77,11 @@ qt_add_qml_module(appFallGuysPing
         src/Settings.h
         src/Settings.cpp
         src/TextCorner.h
+        src/IPGeoLocator.h
+        src/IPGeoLocator.cpp
+        src/Registry.h
+        src/Registry.cpp
+        src/ToastHandler.h
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -92,6 +99,7 @@ target_sources(appFallGuysPing PRIVATE
 target_link_libraries(appFallGuysPing PRIVATE
     Qt6::Quick
     Qt6::Widgets
+    WinToast
     Iphlpapi
     Ws2_32
 

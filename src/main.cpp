@@ -45,10 +45,10 @@ int main(int argc, char *argv[])
         return -1;
 
     QObject* root = engine.rootObjects().at(0);
-    QWindow* mainWindow = qobject_cast<QWindow*>(root);
+    QQuickWindow* mainWindow = qobject_cast<QQuickWindow*>(root);
     HWND hwnd = (HWND)mainWindow->winId();
 
-    manager.initTrayIcon(&app, root, hwnd);
+    manager.initTrayIcon(&app, mainWindow);
 
     QObject::connect(&app, &SingleApplication::instanceStarted, mainWindow, &QWindow::showNormal);
     QObject::connect(&app, &SingleApplication::instanceStarted, [hwnd]() {

@@ -5,13 +5,13 @@
 #include "Pinger.h"
 #include "Settings.h"
 #include "TrayIcon.h"
+#include "IPGeoLocator.h"
 
 #include <QObject>
 
-#include <windows.h>
-#include <tlhelp32.h>
 #include <tchar.h>
-
+#include <tlhelp32.h>
+#include <windows.h>
 
 class Manager : public QObject
 {
@@ -28,10 +28,10 @@ public:
         Both
     };
 
-    explicit Manager(QObject *parent, WindowMode windowMode);
+    explicit Manager(QObject* parent, WindowMode windowMode);
 
     void addFile(const QString &filePath);
-    void initTrayIcon(QObject* parent, QObject* root, HWND& hwnd);
+    void initTrayIcon(QObject* parent, QQuickWindow* rootWindow);
 
     Pinger* pinger();
     Settings* settings();
@@ -51,10 +51,10 @@ private:
     Pinger m_pinger;
     TrayIcon* m_trayIcon{};
     Settings m_settings;
+    IPGeoLocator m_locator;
     HANDLE m_hProcess = NULL;
     HWINEVENTHOOK m_hEventHookFocus{};
     HWINEVENTHOOK m_hEventHookForeground{};
-    bool m_trayIconInitialized = false;
     bool m_isGameActive{};
     WindowMode m_windowMode;
 

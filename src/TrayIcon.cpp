@@ -1,11 +1,11 @@
 #include "TrayIcon.h"
 
 
-TrayIcon::TrayIcon(QObject* parent, QObject* root, HWND hwnd)
-    : QObject{parent},
-      m_root{root},
-      m_hwnd{hwnd},
-      m_trayIcon{new QSystemTrayIcon(root)}
+TrayIcon::TrayIcon(QObject* parent,  QQuickWindow *rootWindow)
+    : QObject{parent}
+    , m_rootWindow{rootWindow}
+    , m_hwnd{(HWND)rootWindow->winId()}
+    , m_trayIcon{new QSystemTrayIcon(rootWindow)}
 {
     QMenu* trayIconMenu = createMenu();
 
@@ -14,17 +14,16 @@ TrayIcon::TrayIcon(QObject* parent, QObject* root, HWND hwnd)
     m_trayIcon->setToolTip("FallGuysPing");
     m_trayIcon->show();
 
-    QQuickWindow* windowRoot = qobject_cast<QQuickWindow*>(m_root);
+    initWinToast();
 
     connect(m_trayIcon, &QSystemTrayIcon::activated, this, &TrayIcon::trayIconActivated);
-    connect(this, &TrayIcon::singleClick, windowRoot, &QQuickWindow::showNormal);
-    connect(this, &TrayIcon::singleClick, this, &TrayIcon::bringToTop);
+    connect(this, &TrayIcon::singleClicked, this, &TrayIcon::showWindow);
 }
 
 void TrayIcon::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     if (reason == QSystemTrayIcon::Trigger)
-        emit singleClick();
+        emit singleClicked();
 }
 
 void TrayIcon::bringToTop()
@@ -32,20 +31,81 @@ void TrayIcon::bringToTop()
     SetForegroundWindow(m_hwnd);
 }
 
+void TrayIcon::showWindow()
+{
+    m_rootWindow->showNormal();
+    bringToTop();
+}
+
 QMenu* TrayIcon::createMenu()
 {
-    QQuickWindow* windowRoot = qobject_cast<QQuickWindow*>(m_root);
+    QAction* restoreAction = new QAction(QObject::tr("&Restore"), m_rootWindow);
+    connect(restoreAction, &QAction::triggered, this, &TrayIcon::showWindow);
 
-    QAction* restoreAction = new QAction(QObject::tr("&Restore"), m_root);
-    m_root->connect(restoreAction, &QAction::triggered, windowRoot, &QQuickWindow::showNormal);
-    m_root->connect(restoreAction, &QAction::triggered, this, &TrayIcon::bringToTop);
-
-    QAction* quitAction = new QAction(QObject::tr("&Quit"), m_root);
-    m_root->connect(quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
+    QAction* quitAction = new QAction(QObject::tr("&Quit"), m_rootWindow);
+    connect(quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
 
     QMenu* trayIconMenu = new QMenu();
     trayIconMenu->addAction(restoreAction);
     trayIconMenu->addAction(quitAction);
 
     return trayIconMenu;
+}
+
+void TrayIcon::initWinToast()
+{
+    if (!WinToast::isCompatible())
+        Utils::errorExit("[WinToast]: Error, your system in not supported!");
+
+    WinToast::instance()->setAppName(L"FallGuysPing");
+    const auto aumi = WinToast::configureAUMI(L"diegojgb", L"FallGuysPing", L"ToastNotifications");
+    WinToast::instance()->setAppUserModelId(aumi);
+    WinToast::instance()->setShortcutPolicy(WinToast::ShortcutPolicy::SHORTCUT_POLICY_IGNORE);
+
+    // Add icon and name to registry, so Windows can display them in toast notifications.
+    if (!Registry::createRegistryKey(HKEY_CURRENT_USER, L"Software\\Classes\\AppUserModelId\\diegojgb.FallGuysPing.ToastNotifications"))
+    {
+        Utils::errorExit("[Registry]: Error opening or creating new Registry key");
+    }
+
+    if (!Registry::writeStringInRegistry(
+            HKEY_CURRENT_USER,
+            L"Software\\Classes\\AppUserModelId\\diegojgb.FallGuysPing.ToastNotifications",
+            L"DisplayName",
+            L"FallGuysPing"))
+    {
+        Utils::errorExit("[Registry]: Error saving toast DisplayName Registry value");
+    }
+
+    QString defaultIcon = QCoreApplication::applicationDirPath() + "/assets/ping-icon.ico";
+    defaultIcon.replace("/", "\\");
+    if (!Registry::writeStringInRegistry(
+            HKEY_CURRENT_USER,
+            L"Software\\Classes\\AppUserModelId\\diegojgb.FallGuysPing.ToastNotifications",
+            L"IconUri",
+            defaultIcon.toStdWString().c_str()))
+    {
+        Utils::errorExit("[Registry]: Error saving toast IconUri Regitry value");
+    }
+
+    if (!WinToast::instance()->initialize())
+        Utils::errorExit("[WinToast]: Error, could not initialize WinToast!");
+}
+
+void TrayIcon::sendNotification(const WinToastTemplate &templ)
+{
+    if (WinToast::instance()->showToast(templ, new ToastHandler()) < 0)
+    {
+        Utils::errorExit("[WinToast]: Could not launch your toast notification!");
+    }
+}
+
+void TrayIcon::sendNotification(const std::wstring title, const std::wstring subtitle, const std::wstring imagePath)
+{
+    WinToastTemplate templ = WinToastTemplate(WinToastTemplate::ImageAndText02);
+    templ.setTextField(title, WinToastTemplate::FirstLine);
+    templ.setTextField(subtitle, WinToastTemplate::SecondLine);
+    templ.setImagePath(imagePath);
+
+    sendNotification(templ);
 }

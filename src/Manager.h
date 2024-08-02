@@ -40,8 +40,10 @@ public:
     void setIsGameActive(bool newIsGameActive);
 
 public slots:
-    void onIpFound(const std::string& ip);
+    void onIpFound(const QString& ip);
     void onDisconnectFound();
+    void showLocationToast(const QString& location);
+    void onLocationToastEnabledChanged();
 
 signals:
     void isGameActiveChanged();

@@ -8,9 +8,9 @@ namespace {
 Manager* g_managerInstance = nullptr;
 
 Manager::Manager(QObject *parent, WindowMode windowMode)
-    : QObject{parent},
-      m_isGameActive{isGameActiveCheck(windowMode)},
-      m_windowMode{windowMode}
+    : QObject{parent}
+    , m_isGameActive{isGameActiveCheck(windowMode)}
+    , m_windowMode{windowMode}
 {
     if (windowMode != WindowMode::Foreground)
         setFocusedWindowChangeHook();
@@ -22,6 +22,7 @@ Manager::Manager(QObject *parent, WindowMode windowMode)
     connect(&m_fileWatcher, &FileWatcher::disconnectFound, this, &Manager::onDisconnectFound);
     connect(&m_settings, &Settings::pingIntervalChangedOverload, &m_pinger, &Pinger::onPingIntervalChanged);
     connect(&m_settings, &Settings::quitOnGameExitChangedOverload, &m_fileWatcher, &FileWatcher::setQuitOnGameExit);
+    connect(&m_settings, &Settings::locationToastEnabledChanged, this, &Manager::onLocationToastEnabledChanged);
 
     m_settings.loadSettings();
 }
@@ -138,7 +139,7 @@ void Manager::WinForegroundCallback(HWINEVENTHOOK hWinEventHook,
     }
 }
 
-void Manager::onIpFound(const std::string& ip)
+void Manager::onIpFound(const QString& ip)
 {
     m_pinger.start(ip);
 }
@@ -146,6 +147,26 @@ void Manager::onIpFound(const std::string& ip)
 void Manager::onDisconnectFound()
 {
     m_pinger.stop();
+}
+
+void Manager::showLocationToast(const QString& location)
+{
+    TrayIcon::sendNotification(L"Connected to server",
+                               location.toStdWString(),
+                               QCoreApplication::applicationDirPath().toStdWString() + L"/assets/globe-location.png");
+}
+
+void Manager::onLocationToastEnabledChanged()
+{
+    bool enabled = m_settings.locationToastEnabled();
+
+    if (enabled) {
+        connect(&m_fileWatcher, &FileWatcher::ipFound, &m_locator, &IPGeoLocator::findLocation);
+        connect(&m_locator, &IPGeoLocator::locationFound, this, &Manager::showLocationToast);
+    } else {
+        disconnect(&m_fileWatcher, &FileWatcher::ipFound, &m_locator, &IPGeoLocator::findLocation);
+        disconnect(&m_locator, &IPGeoLocator::locationFound, this, &Manager::showLocationToast);
+    }
 }
 
 bool Manager::isGameRunning()

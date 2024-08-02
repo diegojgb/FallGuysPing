@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTimerEvent>
+#include <QDebug>
 
 #include <WS2tcpip.h>
 #include <Windows.h>
@@ -25,7 +26,7 @@ public:
     Q_INVOKABLE void setPingInterval(int interval);
 
 public slots:
-    void startIp(const std::string& ip);
+    void startIp(const QString& ip);
     void finish();
 
 signals:
@@ -40,7 +41,7 @@ private:
     IN_ADDR m_ip{};
     HANDLE m_icmpHandle;
 
-    std::string m_ipStr;
+    QString m_ipStr;
 
     int m_timer{};
     int m_pingInterval = 3000;

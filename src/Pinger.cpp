@@ -18,10 +18,10 @@ Pinger::Pinger(QObject *parent)
     m_thread->start();
 }
 
-void Pinger::start(const std::string& ip)
+void Pinger::start(const QString& ip)
 {
     QMetaObject::invokeMethod(m_worker, "startIp", Qt::QueuedConnection,
-                              Q_ARG(std::string, ip));
+                              Q_ARG(QString, ip));
 }
 
 void Pinger::stop()

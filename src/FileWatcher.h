@@ -34,7 +34,7 @@ public slots:
     void setQuitOnGameExit(bool newValue);
 
 signals:
-    void ipFound(const std::string& ip);
+    void ipFound(const QString& ip);
     void disconnectFound();
     void checkFailed(const QString& filePath);
 

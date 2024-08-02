@@ -41,11 +41,12 @@ void PingWorker::restart()
     }
 }
 
-void PingWorker::startIp(const std::string& ip)
+void PingWorker::startIp(const QString& ip)
 {
     m_ipStr = ip;
+    std::string stdStr = ip.toStdString();
 
-    if (InetPtonA(AF_INET, m_ipStr.c_str(), &m_ip) != 1) {
+    if (InetPtonA(AF_INET, stdStr.c_str(), &m_ip) != 1) {
         int error = WSAGetLastError();
         std::string errorMessage = "Failed to convert IP address string to binary form. Error code: " + std::to_string(error);
         throw std::runtime_error(errorMessage);
@@ -104,8 +105,8 @@ QString PingWorker::ping()
 
         GetIpErrorString(e, buf, &buf_size);
 
-        std::cerr << "IcmpSendEcho returned error " << e << " (" << buf << ")" << std::endl;
-        std::cerr << "Failed to ping: " << m_ipStr << std::endl;
+        qCritical() << "IcmpSendEcho returned error " << e << " (" << buf << ")";
+        qCritical() << "Failed to ping: " << m_ipStr;
     }
 
     const ICMP_ECHO_REPLY *r = (const ICMP_ECHO_REPLY*) replyBuf;

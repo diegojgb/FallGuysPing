@@ -21,7 +21,7 @@ ColumnLayout {
         id: generalCol
         Layout.topMargin: 10
         Layout.leftMargin: 20
-        spacing: 15
+        spacing: 13
 
         RowLayout {
             id: intervalRow
@@ -62,6 +62,13 @@ ColumnLayout {
                 text: "Ping interval (seconds)"
                 renderType: Text.NativeRendering
             }
+        }
+
+        CustomCheckBox {
+            text: "Display a notification with the aprox location of the server"
+            spacing: 8
+            checked: Manager.settings.locationToastEnabled
+            onCheckedChanged: Manager.settings.locationToastEnabled = checked
         }
     }
 

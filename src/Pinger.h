@@ -20,7 +20,7 @@ public:
     QString latestPing() const;
     void setLatestPing(const QString &newLatestPing);
 
-    void start(const std::string& ip);
+    void start(const QString& ip);
     void stop();
 
 public slots:

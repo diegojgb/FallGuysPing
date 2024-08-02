@@ -23,6 +23,7 @@ class Settings : public QObject
     Q_PROPERTY(bool alwaysVisible READ alwaysVisible WRITE setAlwaysVisible NOTIFY alwaysVisibleChanged FINAL)
     Q_PROPERTY(int pingInterval READ pingInterval WRITE setPingInterval NOTIFY pingIntervalChanged FINAL)
     Q_PROPERTY(bool quitOnGameExit READ quitOnGameExit WRITE setQuitOnGameExit NOTIFY quitOnGameExitChanged FINAL)
+    Q_PROPERTY(bool locationToastEnabled READ locationToastEnabled WRITE setLocationToastEnabled NOTIFY locationToastEnabledChanged FINAL)
 
 public:
     explicit Settings(QObject* parent = nullptr);
@@ -60,9 +61,10 @@ public:
     bool quitOnGameExit() const;
     void setQuitOnGameExit(bool newQuitOnGameExit);
 
+    bool locationToastEnabled() const;
+    void setLocationToastEnabled(bool newLocationToastEnabled);
+
     void loadSettings();
-    QString textCornerToString(TextCorner::Value value);
-    TextCorner::Value textCornerFromString(QString& value);
 
     Q_INVOKABLE void savePosition(QPoint point);
     Q_INVOKABLE QPoint getSavedPosition();
@@ -79,11 +81,14 @@ signals:
     void alwaysVisibleChanged();
     void pingIntervalChanged();
     void quitOnGameExitChanged();
+    void locationToastEnabledChanged();
 
     void quitOnGameExitChangedOverload(bool value);
     void pingIntervalChangedOverload(int interval);
 
 private:
+    QString m_settingsFile;
+    QSettings m_qSettings;
     bool m_startMinimized = false;
     bool m_draggableText{};
     TextCorner::Value m_textCorner = TextCorner::Value::TopRight;
@@ -92,11 +97,10 @@ private:
     bool m_textOutline{};
     bool m_boldText{};
     QString m_fontFamily;
-    QString m_settingsFile;
-    QSettings m_qSettings;
     bool m_alwaysVisible{};
     int m_pingInterval{};
     bool m_quitOnGameExit{};
+    bool m_locationToastEnabled{};
 };
 
 #endif // SETTINGS_H

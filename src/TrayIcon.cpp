@@ -77,7 +77,7 @@ void TrayIcon::initWinToast()
         Utils::errorExit("[Registry]: Error saving toast DisplayName Registry value");
     }
 
-    QString defaultIcon = QCoreApplication::applicationDirPath() + "/assets/ping-icon.ico";
+    QString defaultIcon = QCoreApplication::applicationDirPath() + "/assets/ping-icon.png";
     defaultIcon.replace("/", "\\");
     if (!Registry::writeStringInRegistry(
             HKEY_CURRENT_USER,

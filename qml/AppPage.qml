@@ -5,7 +5,7 @@ import QtQuick.Controls
 ColumnLayout {
     id: page
 
-    property int sectionTopMargin: 22
+    property int sectionTopMargin: 18
 
     Label {
         text: 'App settings'
@@ -13,7 +13,7 @@ ColumnLayout {
     }
 
     LabelSeparator {
-        Layout.topMargin: page.sectionTopMargin - 4
+        Layout.topMargin: page.sectionTopMargin
         text: 'General'
     }
 
@@ -23,11 +23,26 @@ ColumnLayout {
         Layout.leftMargin: 20
         spacing: 13
 
+        CustomCheckBox {
+            text: "Display a notification with the aprox location of the server"
+            spacing: 8
+            checked: Manager.settings.locationToastEnabled
+            onCheckedChanged: Manager.settings.locationToastEnabled = checked
+        }
+
         RowLayout {
             id: intervalRow
 
+            Text {
+                Layout.alignment: Qt.AlignVCenter
+                bottomPadding: 2
+                text: "Ping interval (seconds):"
+                renderType: Text.NativeRendering
+            }
+
             FusionSpinBox {
                 id: pingRateBox
+                Layout.leftMargin: 4
                 Layout.preferredWidth: 80
                 stepSize: 1000
                 from: 1000
@@ -54,21 +69,6 @@ ColumnLayout {
                     notation: DoubleValidator.StandardNotation
                 }
             }
-
-            Text {
-                Layout.leftMargin: 5
-                Layout.alignment: Qt.AlignVCenter
-                bottomPadding: 2
-                text: "Ping interval (seconds)"
-                renderType: Text.NativeRendering
-            }
-        }
-
-        CustomCheckBox {
-            text: "Display a notification with the aprox location of the server"
-            spacing: 8
-            checked: Manager.settings.locationToastEnabled
-            onCheckedChanged: Manager.settings.locationToastEnabled = checked
         }
     }
 

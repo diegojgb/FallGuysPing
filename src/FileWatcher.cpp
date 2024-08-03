@@ -47,7 +47,6 @@ bool FileWatcher::matchServerInfo(std::string& text)
     bool ipMatch = std::regex_search(text, m_match, m_ipRegex);
 
     if (ipMatch) {
-        qDebug() << m_match[1].str();
         emit ipFound(QString::fromStdString(m_match[1].str()));
         return true;
     }

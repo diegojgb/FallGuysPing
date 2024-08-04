@@ -7,7 +7,7 @@ Settings::Settings(QObject* parent)
     , m_startMinimized{m_qSettings.value("StartMinimized", false).toBool()}
     , m_draggableText{m_qSettings.value("DraggableText", false).toBool()}
     , m_textColor{QColor(m_qSettings.value("TextColor", "#fff").toString())}
-    , m_textSize{m_qSettings.value("TextSize", 14).toInt()}
+    , m_textSize{m_qSettings.value("TextSize", 16).toInt()}
     , m_textOutline{m_qSettings.value("TextOutline", false).toBool()}
     , m_boldText{m_qSettings.value("BoldText", true).toBool()}
     , m_fontFamily{m_qSettings.value("FontFamily", "Segoe UI").toString()}
@@ -154,9 +154,10 @@ void Settings::setFontFamily(const QString &newFontFamily)
 // Settings that need to be initialized through the setter.
 void Settings::loadSettings()
 {
-    setPingInterval(m_qSettings.value("PingInterval", 3000).toInt()); // Setter needs to be called for Pinger/PingWorker to update.
+    setPingInterval(m_qSettings.value("PingInterval", 5000).toInt()); // Setter needs to be called for Pinger/PingWorker to update.
     setQuitOnGameExit(m_qSettings.value("QuitOnGameExit", false).toBool()); // Setter needs to be called for FileWatcher to update.
-    setLocationToastEnabled(m_qSettings.value("LocationToastEnabled", true).toBool());
+    setLocationToastEnabled(m_qSettings.value("LocationToastEnabled", false).toBool());
+    setLocationOverlayEnabled(m_qSettings.value("LocationOverlayEnabled", true).toBool());
 }
 
 void Settings::savePosition(QPoint point)
@@ -238,5 +239,24 @@ void Settings::setLocationToastEnabled(bool newLocationToastEnabled)
 
     m_locationToastEnabled = newLocationToastEnabled;
 
+    m_qSettings.setValue("LocationToastEnabled", newLocationToastEnabled);
+
     emit locationToastEnabledChanged();
+}
+
+bool Settings::locationOverlayEnabled() const
+{
+    return m_locationOverlayEnabled;
+}
+
+void Settings::setLocationOverlayEnabled(bool newLocationOverlayEnabled)
+{
+    if (m_locationOverlayEnabled == newLocationOverlayEnabled)
+        return;
+
+    m_locationOverlayEnabled = newLocationOverlayEnabled;
+
+    m_qSettings.setValue("LocationOverlayEnabled", newLocationOverlayEnabled);
+
+    emit locationOverlayEnabledChanged();
 }

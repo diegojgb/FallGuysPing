@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     QApplication::setStyle(QStyleFactory::create("Fusion"));
     SingleApplication app(argc, argv);
 
-    Manager manager(&app, Manager::Foreground);
+    Manager manager(&app, Manager::Both);
     g_managerInstance = &manager;
 
     QString path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);

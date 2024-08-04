@@ -6,6 +6,7 @@
 #include "Settings.h"
 #include "TrayIcon.h"
 #include "IPGeoLocator.h"
+#include "GeoData.h"
 
 #include <QObject>
 
@@ -19,7 +20,9 @@ class Manager : public QObject
 
     Q_PROPERTY(Pinger* pinger READ pinger CONSTANT)
     Q_PROPERTY(Settings* settings READ settings CONSTANT)
+    Q_PROPERTY(IPGeoLocator* geoLocator READ geoLocator CONSTANT)
     Q_PROPERTY(bool isGameActive READ isGameActive WRITE setIsGameActive NOTIFY isGameActiveChanged FINAL)
+    Q_PROPERTY(bool connected READ connected NOTIFY connectedChanged FINAL)
 
 public:
     enum WindowMode {
@@ -35,18 +38,23 @@ public:
 
     Pinger* pinger();
     Settings* settings();
+    IPGeoLocator* geoLocator();
 
     bool isGameActive() const;
     void setIsGameActive(bool newIsGameActive);
+
+    bool connected() const;
 
 public slots:
     void onIpFound(const QString& ip);
     void onDisconnectFound();
     void showLocationToast(const QString& location);
     void onLocationToastEnabledChanged();
+    void onLocationOverlayEnabledChanged();
 
 signals:
     void isGameActiveChanged();
+    void connectedChanged();
 
 private:
     FileWatcher m_fileWatcher;
@@ -59,6 +67,8 @@ private:
     HWINEVENTHOOK m_hEventHookForeground{};
     bool m_isGameActive{};
     WindowMode m_windowMode;
+    bool m_connected{};
+    bool m_geoEnabled{};
 
     static VOID CALLBACK WinFocusCallback (HWINEVENTHOOK hWinEventHook, DWORD dwEvent, HWND hwnd, LONG idObject, LONG idChild, DWORD dwEventThread, DWORD dwmsEventTime);
     static VOID CALLBACK WinForegroundCallback (HWINEVENTHOOK hWinEventHook, DWORD dwEvent, HWND hwnd, LONG idObject, LONG idChild, DWORD dwEventThread, DWORD dwmsEventTime);
@@ -68,6 +78,9 @@ private:
     bool isProcessRunning(LPCTSTR& processName);
     void setFocusedWindowChangeHook();
     void setForegroundWindowChangeHook();
+    void setConnected(bool newConnected);
+    void enableGeo();
+    void disableGeo();
 };
 
 extern Manager* g_managerInstance;

@@ -11,7 +11,7 @@ ColumnLayout {
     property int sectionTopMargin: 22
 
     Label {
-        text: 'Overlay settings'
+        text: 'Overlay formatting'
         font.pointSize: 17
     }
 
@@ -126,6 +126,7 @@ ColumnLayout {
             CustomCheckBox {
                 Layout.leftMargin: 5
                 text: "Bold text"
+                spacing: 6
                 checked: Manager.settings.boldText
                 onCheckedChanged: Manager.settings.boldText = checked
             }

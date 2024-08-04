@@ -23,6 +23,7 @@ Manager::Manager(QObject *parent, WindowMode windowMode)
     connect(&m_settings, &Settings::pingIntervalChangedOverload, &m_pinger, &Pinger::onPingIntervalChanged);
     connect(&m_settings, &Settings::quitOnGameExitChangedOverload, &m_fileWatcher, &FileWatcher::setQuitOnGameExit);
     connect(&m_settings, &Settings::locationToastEnabledChanged, this, &Manager::onLocationToastEnabledChanged);
+    connect(&m_settings, &Settings::locationOverlayEnabledChanged, this, &Manager::onLocationOverlayEnabledChanged);
 
     m_settings.loadSettings();
 }
@@ -141,11 +142,13 @@ void Manager::WinForegroundCallback(HWINEVENTHOOK hWinEventHook,
 
 void Manager::onIpFound(const QString& ip)
 {
+    setConnected(true);
     m_pinger.start(ip);
 }
 
 void Manager::onDisconnectFound()
 {
+    setConnected(false);
     m_pinger.stop();
 }
 
@@ -161,11 +164,24 @@ void Manager::onLocationToastEnabledChanged()
     bool enabled = m_settings.locationToastEnabled();
 
     if (enabled) {
-        connect(&m_fileWatcher, &FileWatcher::ipFound, &m_locator, &IPGeoLocator::findLocation);
         connect(&m_locator, &IPGeoLocator::locationFound, this, &Manager::showLocationToast);
+        if (!m_geoEnabled)
+            enableGeo();
     } else {
-        disconnect(&m_fileWatcher, &FileWatcher::ipFound, &m_locator, &IPGeoLocator::findLocation);
         disconnect(&m_locator, &IPGeoLocator::locationFound, this, &Manager::showLocationToast);
+        if (!m_settings.locationOverlayEnabled())
+            disableGeo();
+    }
+}
+
+void Manager::onLocationOverlayEnabledChanged()
+{
+    bool enabled = m_settings.locationOverlayEnabled();
+
+    if (enabled && !m_geoEnabled) {
+        enableGeo();
+    } else if (!enabled && m_settings.locationToastEnabled()) {
+        disableGeo();
     }
 }
 
@@ -198,4 +214,46 @@ void Manager::setIsGameActive(bool newIsGameActive)
     m_isGameActive = newIsGameActive;
 
     emit isGameActiveChanged();
+}
+
+IPGeoLocator* Manager::geoLocator()
+{
+    return &m_locator;
+}
+
+bool Manager::connected() const
+{
+    return m_connected;
+}
+
+void Manager::setConnected(bool newConnected)
+{
+    if (m_connected == newConnected)
+        return;
+
+    m_connected = newConnected;
+
+    emit connectedChanged();
+}
+
+void Manager::enableGeo()
+{
+    if (m_geoEnabled)
+        return;
+
+    connect(&m_fileWatcher, &FileWatcher::ipFound, &m_locator, &IPGeoLocator::findLocation);
+    connect(&m_fileWatcher, &FileWatcher::disconnectFound, &m_locator, &IPGeoLocator::onDisconnectFound);
+
+    m_geoEnabled = true;
+}
+
+void Manager::disableGeo()
+{
+    if (!m_geoEnabled)
+        return;
+
+    disconnect(&m_fileWatcher, &FileWatcher::ipFound, &m_locator, &IPGeoLocator::findLocation);
+    disconnect(&m_fileWatcher, &FileWatcher::disconnectFound, &m_locator, &IPGeoLocator::onDisconnectFound);
+
+    m_geoEnabled = false;
 }

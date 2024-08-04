@@ -7,13 +7,17 @@ const QString IPGeoLocator::IPINFO_URL = "https://ipinfo.io/";
 
 
 IPGeoLocator::IPGeoLocator(QObject *parent)
-    : QObject{parent}, m_manager{QNetworkAccessManager(this)}
+    : QObject{parent}
+    , m_manager{QNetworkAccessManager(this)}
+    , m_country{"D/C"}
+    , m_region{"D/C"}
+    , m_serverRegion{""}
 {}
 
 void IPGeoLocator::findLocation(const QString& ip)
 {
     m_currentIp = ip;
-    queryAPI(ip, IP2LOCATION_URL);
+    queryAPI(ip, IPINFO_URL);
 }
 
 void IPGeoLocator::queryAPI(const QString& ip, const QString& serviceUrl)
@@ -24,6 +28,54 @@ void IPGeoLocator::queryAPI(const QString& ip, const QString& serviceUrl)
     QObject::connect(reply, &QNetworkReply::finished, this, [this, reply, serviceUrl]() {
         this->onReply(reply, serviceUrl);
     });
+}
+
+void IPGeoLocator::updateServerRegion()
+{
+    if (m_country == "United States")
+        setServerRegion(QString("US (%1)").arg(GeoData::stateToRegionUS(m_region)));
+    else
+        setServerRegion(GeoData::countryCodeToRegion(m_countryCode));
+}
+
+QString IPGeoLocator::getLocationStr()
+{
+    if (m_serverRegion == "")
+        return QString("%1, %2").arg(m_country, m_region);
+    else if (m_country == "United States")
+        return QString("%1, %2").arg(m_serverRegion, m_region);
+    else
+        return QString("%1, %2, %3").arg(m_serverRegion, m_country, m_region);
+}
+
+void IPGeoLocator::setCountry(const QString& newCountry)
+{
+    if (m_country == newCountry)
+        return;
+
+    m_country = newCountry;
+
+    emit countryChanged();
+}
+
+void IPGeoLocator::setRegion(const QString& newRegion)
+{
+    if (m_region == newRegion)
+        return;
+
+    m_region = newRegion;
+
+    emit regionChanged();
+}
+
+void IPGeoLocator::setServerRegion(const QString& newServerRegion)
+{
+    if (m_serverRegion == newServerRegion)
+        return;
+
+    m_serverRegion = newServerRegion;
+
+    emit serverRegionChanged();
 }
 
 void IPGeoLocator::onReply(QNetworkReply* reply, const QString& serviceUrl)
@@ -50,7 +102,7 @@ void IPGeoLocator::onReply(QNetworkReply* reply, const QString& serviceUrl)
 
     QString countryCodeKey;
     QString regionKey;
-    QString cityKey;
+    // QString cityKey;
 
     if (serviceUrl == IP2LOCATION_URL || serviceUrl == NORDVPN_URL)
         countryCodeKey = "country_code";
@@ -59,10 +111,10 @@ void IPGeoLocator::onReply(QNetworkReply* reply, const QString& serviceUrl)
 
     if (serviceUrl == IP2LOCATION_URL) {
         regionKey = "region_name";
-        cityKey = "city_name";
+        // cityKey = "city_name";
     } else if (serviceUrl == IPINFO_URL || serviceUrl == NORDVPN_URL) {
         regionKey = "region";
-        cityKey = "city";
+        // cityKey = "city";
     }
 
     if (!obj.contains(countryCodeKey) || !obj[countryCodeKey].isString()) {
@@ -70,21 +122,43 @@ void IPGeoLocator::onReply(QNetworkReply* reply, const QString& serviceUrl)
         return;
     }
     if (!obj.contains(regionKey) || !obj[regionKey].isString()) {
-        qCritical() << "[IPGeoLocator/IP2location]: Missing/invalid country code.";
+        qCritical() << "[IPGeoLocator/IP2location]: Missing/invalid region.";
         return;
     }
-    if (!obj.contains(cityKey) || !obj[cityKey].isString()) {
-        qCritical() << "[IPGeoLocator/IP2location]: Missing/invalid country code.";
-        return;
-    }
+    // if (!obj.contains(cityKey) || !obj[cityKey].isString()) {
+    //     qCritical() << "[IPGeoLocator/IP2location]: Missing/invalid country code.";
+    //     return;
+    // }
 
-    QString countryCode = obj[countryCodeKey].toString();
-    QString region = obj[regionKey].toString();
-    QString city = obj[cityKey].toString();
+    m_countryCode = obj[countryCodeKey].toString();
 
-    QString location = QString("%1, %2, %3").arg(countryCode, region, city);
+    setRegion(obj[regionKey].toString());
+    setCountry(GeoData::countryCodeToName(m_countryCode));
+    updateServerRegion();
 
-    emit locationFound(location);
+    emit locationFound(getLocationStr());
 
     reply->deleteLater();
+}
+
+void IPGeoLocator::onDisconnectFound()
+{
+    setRegion("D/C");
+    setCountry("D/C");
+    setServerRegion("");
+}
+
+QString IPGeoLocator::country() const
+{
+    return m_country;
+}
+
+QString IPGeoLocator::region() const
+{
+    return m_region;
+}
+
+QString IPGeoLocator::serverRegion() const
+{
+    return m_serverRegion;
 }

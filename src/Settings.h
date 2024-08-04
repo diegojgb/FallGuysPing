@@ -24,6 +24,7 @@ class Settings : public QObject
     Q_PROPERTY(int pingInterval READ pingInterval WRITE setPingInterval NOTIFY pingIntervalChanged FINAL)
     Q_PROPERTY(bool quitOnGameExit READ quitOnGameExit WRITE setQuitOnGameExit NOTIFY quitOnGameExitChanged FINAL)
     Q_PROPERTY(bool locationToastEnabled READ locationToastEnabled WRITE setLocationToastEnabled NOTIFY locationToastEnabledChanged FINAL)
+    Q_PROPERTY(bool locationOverlayEnabled READ locationOverlayEnabled WRITE setLocationOverlayEnabled NOTIFY locationOverlayEnabledChanged FINAL)
 
 public:
     explicit Settings(QObject* parent = nullptr);
@@ -69,6 +70,9 @@ public:
     Q_INVOKABLE void savePosition(QPoint point);
     Q_INVOKABLE QPoint getSavedPosition();
 
+    bool locationOverlayEnabled() const;
+    void setLocationOverlayEnabled(bool newLocationOverlayEnabled);
+
 signals:
     void startMinimizedChanged();
     void draggableTextChanged();
@@ -82,6 +86,7 @@ signals:
     void pingIntervalChanged();
     void quitOnGameExitChanged();
     void locationToastEnabledChanged();
+    void locationOverlayEnabledChanged();
 
     void quitOnGameExitChangedOverload(bool value);
     void pingIntervalChangedOverload(int interval);
@@ -101,6 +106,7 @@ private:
     int m_pingInterval{};
     bool m_quitOnGameExit{};
     bool m_locationToastEnabled{};
+    bool m_locationOverlayEnabled{};
 };
 
 #endif // SETTINGS_H

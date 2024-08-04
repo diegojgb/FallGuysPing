@@ -5,6 +5,7 @@ CheckBox {
     id: control
     text: "CheckBox"
     checked: false
+    spacing: 8
 
     property color checkedColor: root.accentColor
     property color uncheckedColor: Qt.darker(root.sidebarBgColor, 1.2)

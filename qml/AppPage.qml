@@ -21,17 +21,23 @@ ColumnLayout {
         id: generalCol
         Layout.topMargin: 10
         Layout.leftMargin: 20
-        spacing: 13
+        spacing: 10
 
         CustomCheckBox {
-            text: "Display a notification with the aprox location of the server"
-            spacing: 8
+            text: "Show server location in overlay"
+            checked: Manager.settings.locationOverlayEnabled
+            onCheckedChanged: Manager.settings.locationOverlayEnabled = checked
+        }
+
+        CustomCheckBox {
+            text: "Display a notification with the server location upon connection"
             checked: Manager.settings.locationToastEnabled
             onCheckedChanged: Manager.settings.locationToastEnabled = checked
         }
 
         RowLayout {
             id: intervalRow
+            Layout.topMargin: 3
 
             Text {
                 Layout.alignment: Qt.AlignVCenter
@@ -86,7 +92,6 @@ ColumnLayout {
         CustomCheckBox {
             id: startMinBox
             text: "Start app minimized to the system tray"
-            spacing: 8
             checked: Manager.settings.startMinimized
             onCheckedChanged: Manager.settings.startMinimized = checked
         }
@@ -94,7 +99,6 @@ ColumnLayout {
         CustomCheckBox {
             id: quitOnGameExit
             text: "Close app on game exit"
-            spacing: 8
             checked: Manager.settings.quitOnGameExit
             onCheckedChanged: Manager.settings.quitOnGameExit = checked
         }

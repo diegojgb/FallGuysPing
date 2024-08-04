@@ -47,7 +47,7 @@ Item {
             Layout.preferredHeight: 30
             Layout.leftMargin: 10
             Layout.rightMargin: 10
-            text: 'Overlay'
+            text: 'Formatting'
             selected: control.selectedView === MainWindow.View.OverlayView
 
             onClicked: control.selectedView = MainWindow.View.OverlayView

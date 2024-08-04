@@ -88,7 +88,10 @@ void PingWorker::finish()
 void PingWorker::timerEvent(QTimerEvent *event)
 {
     if (event->timerId() == m_timer) {
-        emit pinged(ping());
+        auto pingVar = ping();
+
+        if (pingVar != "0")
+            emit pinged(pingVar);
     }
 }
 
@@ -105,8 +108,10 @@ QString PingWorker::ping()
 
         GetIpErrorString(e, buf, &buf_size);
 
-        qCritical() << "IcmpSendEcho returned error " << e << " (" << buf << ")";
-        qCritical() << "Failed to ping: " << m_ipStr;
+        qWarning() << "IcmpSendEcho returned error " << e << " (" << buf << ")";
+        qWarning() << "Failed to ping: " << m_ipStr;
+
+        return "0";
     }
 
     const ICMP_ECHO_REPLY *r = (const ICMP_ECHO_REPLY*) replyBuf;

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 import FallGuysPing
 import TextCorner 1.0
 
@@ -16,13 +17,13 @@ Window {
     flags: transparentInput ? (staticFlags | Qt.WindowTransparentForInput) : staticFlags
     color: "#00000000"
     visible: false
-    height: pingText.height
-    width: pingText.width
+    height: overlayBox.height + root.textPadding * 2
+    width: overlayBox.width + root.textPadding * 2
 
     Component.onCompleted: {
         if (root.textCorner === TextCorner.Custom) {
             var savedPoint = Manager.settings.getSavedPosition()
-            root.x = savedPoint.x
+            root.x = savedPoint.x - root.width
             root.y = savedPoint.y
         } else {
             root.bindXY(root.textCorner)
@@ -37,7 +38,7 @@ Window {
     // Timer {
     //     property int i: 0
 
-    //     interval: 3000
+    //     interval: 2000
     //     running: true
     //     repeat: true
     //     onTriggered: {
@@ -45,10 +46,19 @@ Window {
     //         i += 1
     //     }
     // }
+
+    // Timer {
+    //     interval: 3000
+    //     running: true
+    //     repeat: true
+    //     onTriggered: {
+    //         pingText.text = pingText.text.substring(0, pingText.text.length - 1)
+    //     }
+    // }
     Component.onDestruction: {
         if (root.textCorner === TextCorner.Custom) {
-            pingText.text = 0
-            Manager.settings.savePosition(Qt.point(root.x, root.y))
+            var x = root.x + root.width
+            Manager.settings.savePosition(Qt.point(x, root.y))
         }
     }
 
@@ -67,23 +77,23 @@ Window {
     function bindX(corner) {
         if (corner === TextCorner.TopLeft || corner === TextCorner.BottomLeft)
             root.x = Qt.binding(function () {
-                return -pingText.leftPadding + 3
+                return -root.textPadding + 3
             })
 
         if (corner === TextCorner.TopRight || corner === TextCorner.BottomRight)
             root.x = Qt.binding(function () {
-                return Screen.width - pingText.width + pingText.rightPadding - 3
+                return Screen.width - overlayBox.width - root.textPadding - 4
             })
     }
 
     function bindY(corner) {
         if (corner === TextCorner.TopLeft || corner === TextCorner.TopRight)
-            root.y = -8
+            root.y = -root.textPadding - 5
 
         if (corner === TextCorner.BottomLeft
                 || corner === TextCorner.BottomRight)
             root.y = Qt.binding(function () {
-                return Screen.height - pingText.height + 10
+                return Screen.height - overlayBox.height + 10
             })
     }
 
@@ -93,42 +103,20 @@ Window {
         visible: dragArea.containsMouse
     }
 
-    TextMetrics {
-        id: textMetrics
-        font: pingText.font
-        text: "0123456789"
-    }
+    RowLayout {
+        id: overlayBox
+        spacing: 7
+        anchors.centerIn: parent
 
-    FontMetrics {
-        id: fontMetrics
-        font: pingText.font
-    }
-
-    Text {
-        id: pingText
-
-        property int prevTextLen
         property int prevWidth
-
-        text: Manager.pinger.latestPing
-        color: Manager.settings.textColor
-        font.pointSize: Manager.settings.textSize
-        style: Manager.settings.textOutline ? Text.Outline : Text.Normal
-        font.bold: Manager.settings.boldText
-        font.family: Manager.settings.fontFamily
-
-        rightPadding: root.textPadding
-        leftPadding: root.textPadding
-        topPadding: textMetrics.tightBoundingRect.height - fontMetrics.ascent + root.textPadding
-        bottomPadding: -fontMetrics.descent + root.textPadding
-        renderType: Text.NativeRendering
+        property bool infoVisible: Manager.settings.locationOverlayEnabled
+                                   && Manager.geoLocator.country !== "D/C"
 
         Component.onCompleted: {
-            pingText.prevWidth = pingText.width
-            pingText.prevTextLen = pingText.text.length
+            overlayBox.prevWidth = overlayBox.width
         }
 
-        onTextChanged: {
+        onWidthChanged: {
             if (root.textCorner !== TextCorner.Custom)
                 return
 
@@ -136,13 +124,72 @@ Window {
             if (root.x <= middleLine)
                 return
 
-            if (pingText.text.length !== pingText.prevTextLen) {
-                var newSpace = pingText.width - pingText.prevWidth
+            if (overlayBox.width !== overlayBox.prevWidth) {
+                var newSpace = overlayBox.width - overlayBox.prevWidth
                 root.x = root.x - newSpace
 
-                pingText.prevTextLen = pingText.text.length
-                pingText.prevWidth = pingText.width
+                overlayBox.prevWidth = overlayBox.width
             }
+        }
+
+        CustomText {
+            id: serverText
+            text: Manager.geoLocator.serverRegion
+                  === "" ? Manager.geoLocator.country : Manager.geoLocator.serverRegion
+            visible: overlayBox.infoVisible
+        }
+
+        CustomText {
+            text: "·"
+            visible: overlayBox.infoVisible
+        }
+
+        CustomText {
+            id: regionText
+            text: {
+                if (Manager.geoLocator.country === "United States"
+                        || Manager.geoLocator.serverRegion === "")
+                    return Manager.geoLocator.region
+                else
+                    return Manager.geoLocator.country
+            }
+            visible: overlayBox.infoVisible
+        }
+
+        CustomText {
+            text: "·"
+            visible: overlayBox.infoVisible
+        }
+
+        CustomText {
+            id: pingText
+
+            text: Manager.pinger.latestPing
+
+            property int prevTextLen
+            property int prevWidth
+
+            Component.onCompleted: {
+                pingText.prevWidth = pingText.width
+                pingText.prevTextLen = pingText.text.length
+            }
+
+            // onTextChanged: {
+            //     if (root.textCorner !== TextCorner.Custom)
+            //         return
+
+            //     var middleLine = Screen.width / 2
+            //     if (root.x <= middleLine)
+            //         return
+
+            //     if (pingText.text.length !== pingText.prevTextLen) {
+            //         var newSpace = pingText.width - pingText.prevWidth
+            //         root.x = root.x - newSpace
+
+            //         pingText.prevTextLen = pingText.text.length
+            //         pingText.prevWidth = pingText.width
+            //     }
+            // }
         }
     }
 

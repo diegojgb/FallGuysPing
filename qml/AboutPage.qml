@@ -41,7 +41,7 @@ ColumnLayout {
 
     Label {
         Layout.leftMargin: 26
-        text: 'Released: July 2024'
+        text: 'Released: August 2024'
         font.pointSize: 10
         renderType: Text.NativeRendering
     }

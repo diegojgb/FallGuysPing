@@ -5,7 +5,7 @@ import QtQuick.Layouts
 Item {
     id: control
 
-    property int selectedView: MainWindow.View.AppView
+    property int selectedView: MainWindow.View.OverviewView
 
     ColumnLayout {
         anchors.fill: parent
@@ -30,10 +30,38 @@ Item {
             }
         }
 
+        Text {
+            Layout.topMargin: 12
+            font.pointSize: 8
+            Layout.leftMargin: 10
+            text: "Menu"
+            color: "#666"
+            font.bold: true
+        }
+
         Tab {
             Layout.fillWidth: true
             Layout.preferredHeight: 30
-            Layout.topMargin: 10
+            Layout.leftMargin: 10
+            Layout.rightMargin: 10
+            text: 'Overview'
+            selected: control.selectedView === MainWindow.View.OverviewView
+
+            onClicked: control.selectedView = MainWindow.View.OverviewView
+        }
+
+        Text {
+            Layout.topMargin: 12
+            font.pointSize: 8
+            Layout.leftMargin: 10
+            text: "Settings"
+            color: "#666"
+            font.bold: true
+        }
+
+        Tab {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 30
             Layout.leftMargin: 10
             Layout.rightMargin: 10
             text: 'General'

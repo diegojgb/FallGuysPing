@@ -46,6 +46,7 @@ private:
     std::regex m_exitRegex;
     std::smatch m_match;
     bool m_quitOnGameExit = false;
+    bool m_fileInitialized = false;
 
     bool matchServerInfo(std::string &text);
     bool matchGameExit(std::string &text);

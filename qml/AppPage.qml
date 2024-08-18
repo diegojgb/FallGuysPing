@@ -23,21 +23,8 @@ ColumnLayout {
         Layout.leftMargin: 20
         spacing: 10
 
-        CustomCheckBox {
-            text: "Show server location in overlay"
-            checked: Manager.settings.locationOverlayEnabled
-            onCheckedChanged: Manager.settings.locationOverlayEnabled = checked
-        }
-
-        CustomCheckBox {
-            text: "Display a notification with the server location upon connection"
-            checked: Manager.settings.locationToastEnabled
-            onCheckedChanged: Manager.settings.locationToastEnabled = checked
-        }
-
         RowLayout {
             id: intervalRow
-            Layout.topMargin: 3
 
             Text {
                 Layout.alignment: Qt.AlignVCenter
@@ -76,6 +63,29 @@ ColumnLayout {
                 }
             }
         }
+
+        CustomCheckBox {
+            id: locationEnabledBox
+            text: "Display server location"
+            checked: Manager.settings.locationEnabled
+            onToggled: Manager.settings.locationEnabled = checked
+        }
+
+        CustomCheckBox {
+            Layout.leftMargin: 25
+            text: "Show in overlay"
+            enabled: locationEnabledBox.checked
+            checked: Manager.settings.locationOverlayEnabled
+            onToggled: Manager.settings.locationOverlayEnabled = checked
+        }
+
+        CustomCheckBox {
+            Layout.leftMargin: 25
+            text: "Display a notification on connection"
+            enabled: locationEnabledBox.checked
+            checked: Manager.settings.locationToastEnabled
+            onToggled: Manager.settings.locationToastEnabled = checked
+        }
     }
 
     LabelSeparator {
@@ -93,14 +103,14 @@ ColumnLayout {
             id: startMinBox
             text: "Start app minimized to the system tray"
             checked: Manager.settings.startMinimized
-            onCheckedChanged: Manager.settings.startMinimized = checked
+            onToggled: Manager.settings.startMinimized = checked
         }
 
         CustomCheckBox {
             id: quitOnGameExit
             text: "Close app on game exit"
             checked: Manager.settings.quitOnGameExit
-            onCheckedChanged: Manager.settings.quitOnGameExit = checked
+            onToggled: Manager.settings.quitOnGameExit = checked
         }
     }
 }

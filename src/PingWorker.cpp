@@ -60,8 +60,6 @@ void PingWorker::startIp(const QString& ip)
 void PingWorker::stopIp()
 {
     stop();
-
-    emit pinged("0");
 }
 
 int PingWorker::pingInterval() const

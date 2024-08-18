@@ -20,6 +20,7 @@ ApplicationWindow {
     property var supportedFonts: ["Arial", "Consolas", "Courier", "Georgia", "Segoe UI", "Tahoma", "Times New Roman", "Trebuchet MS", "Verdana"]
 
     enum View {
+        OverviewView,
         AppView,
         OverlayView,
         AboutView
@@ -66,6 +67,16 @@ ApplicationWindow {
             Layout.fillHeight: true
             Layout.fillWidth: true
             color: root.mainbarBgColor
+
+            OverviewPage {
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.topMargin: 24
+                anchors.leftMargin: 20
+
+                visible: root.activeView === MainWindow.View.OverviewView
+            }
 
             AppPage {
                 anchors.top: parent.top

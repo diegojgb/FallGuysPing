@@ -25,9 +25,15 @@ class Settings : public QObject
     Q_PROPERTY(bool quitOnGameExit READ quitOnGameExit WRITE setQuitOnGameExit NOTIFY quitOnGameExitChanged FINAL)
     Q_PROPERTY(bool locationToastEnabled READ locationToastEnabled WRITE setLocationToastEnabled NOTIFY locationToastEnabledChanged FINAL)
     Q_PROPERTY(bool locationOverlayEnabled READ locationOverlayEnabled WRITE setLocationOverlayEnabled NOTIFY locationOverlayEnabledChanged FINAL)
+    Q_PROPERTY(bool locationEnabled READ locationEnabled WRITE setLocationEnabled NOTIFY locationEnabledChanged FINAL)
 
 public:
     explicit Settings(QObject* parent = nullptr);
+
+    void loadSettings();
+
+    Q_INVOKABLE void savePosition(QPoint point);
+    Q_INVOKABLE QPoint getSavedPosition();
 
     bool startMinimized() const;
     void setStartMinimized(bool newStartMinimized);
@@ -65,13 +71,11 @@ public:
     bool locationToastEnabled() const;
     void setLocationToastEnabled(bool newLocationToastEnabled);
 
-    void loadSettings();
-
-    Q_INVOKABLE void savePosition(QPoint point);
-    Q_INVOKABLE QPoint getSavedPosition();
-
     bool locationOverlayEnabled() const;
     void setLocationOverlayEnabled(bool newLocationOverlayEnabled);
+
+    bool locationEnabled() const;
+    void setLocationEnabled(bool newLocationEnabled);
 
 signals:
     void startMinimizedChanged();
@@ -87,6 +91,7 @@ signals:
     void quitOnGameExitChanged();
     void locationToastEnabledChanged();
     void locationOverlayEnabledChanged();
+    void locationEnabledChanged();
 
     void quitOnGameExitChangedOverload(bool value);
     void pingIntervalChangedOverload(int interval);
@@ -107,6 +112,7 @@ private:
     bool m_quitOnGameExit{};
     bool m_locationToastEnabled{};
     bool m_locationOverlayEnabled{};
+    bool m_locationEnabled{};
 };
 
 #endif // SETTINGS_H

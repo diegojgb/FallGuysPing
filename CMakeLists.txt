@@ -57,6 +57,12 @@ qt_add_qml_module(appFallGuysPing
         qml/CustomCheckBox.qml
         qml/AppPage.qml
         qml/CustomText.qml
+        qml/OverviewPage.qml
+        qml/PingBox.qml
+        qml/ServerInfoRow.qml
+        qml/ServerInfoTable.qml
+        qml/ServerInfoProps.qml
+        qml/PingDashboard.qml
 
     SOURCES
         src/DashedRectangle.h
@@ -85,6 +91,8 @@ qt_add_qml_module(appFallGuysPing
         src/ToastHandler.h
         src/GeoData.h
         src/GeoData.cpp
+        src/Stopwatch.h
+        src/Stopwatch.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

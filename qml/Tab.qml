@@ -65,6 +65,7 @@ TabButton {
                 color: control.textColor
                 elide: Text.ElideRight
                 maximumLineCount: 1
+                renderType: Text.QtRendering
             }
         }
     }

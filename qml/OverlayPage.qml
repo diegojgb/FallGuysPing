@@ -19,8 +19,7 @@ ColumnLayout {
         Layout.topMargin: page.sectionTopMargin
         text: "Always visible"
         checked: Manager.settings.alwaysVisible
-
-        onCheckedChanged: Manager.settings.alwaysVisible = checked
+        onToggled: Manager.settings.alwaysVisible = checked
     }
 
     LabelSeparator {
@@ -43,8 +42,7 @@ ColumnLayout {
                 Layout.leftMargin: 15
                 text: "Enable overlay dragging"
                 checked: Manager.settings.draggableText
-
-                onCheckedChanged: Manager.settings.draggableText = checked
+                onToggled: Manager.settings.draggableText = checked
             }
         }
     }
@@ -128,13 +126,13 @@ ColumnLayout {
                 text: "Bold text"
                 spacing: 6
                 checked: Manager.settings.boldText
-                onCheckedChanged: Manager.settings.boldText = checked
+                onToggled: Manager.settings.boldText = checked
             }
 
             CustomCheckBox {
                 text: "Outlined text"
                 checked: Manager.settings.textOutline
-                onCheckedChanged: Manager.settings.textOutline = checked
+                onToggled: Manager.settings.textOutline = checked
             }
         }
     }

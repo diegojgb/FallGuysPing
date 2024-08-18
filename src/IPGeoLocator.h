@@ -20,6 +20,9 @@ class IPGeoLocator : public QObject
     Q_PROPERTY(QString country READ country NOTIFY countryChanged FINAL)
     Q_PROPERTY(QString region READ region NOTIFY regionChanged FINAL)
     Q_PROPERTY(QString serverRegion READ serverRegion NOTIFY serverRegionChanged FINAL)
+    Q_PROPERTY(QString city READ city NOTIFY cityChanged FINAL)
+    Q_PROPERTY(QString countryCode READ countryCode NOTIFY countryCodeChanged FINAL)
+    Q_PROPERTY(bool active READ active NOTIFY activeChanged FINAL)
 
 public:
     static const QString NORDVPN_URL; // "{NORDVPN_URL}{ip}"
@@ -33,6 +36,9 @@ public:
     QString country() const;
     QString region() const;
     QString serverRegion() const;
+    QString city() const;
+    QString countryCode() const;
+    bool active() const;
 
 public slots:
     void onReply(QNetworkReply* reply, const QString& serviceUrl);
@@ -42,6 +48,9 @@ signals:
     void countryChanged();
     void regionChanged();
     void serverRegionChanged();
+    void cityChanged();
+    void countryCodeChanged();
+    void activeChanged();
 
     void locationFound(const QString& location);
 
@@ -51,7 +60,9 @@ private:
     QString m_countryCode;
     QString m_country;
     QString m_region;
+    QString m_city;
     QString m_serverRegion;
+    bool m_active = false;
 
     void queryAPI(const QString& ip, const QString& serviceUrl);
     void updateServerRegion();
@@ -60,6 +71,9 @@ private:
     void setCountry(const QString& newCountry);
     void setRegion(const QString& newRegion);
     void setServerRegion(const QString& newServerRegion);
+    void setCity(const QString& newCity);
+    void setCountryCode(const QString& newCountryCode);
+    void setActive(bool newActive);
 };
 
 #endif // IPGEOLOCATOR_H

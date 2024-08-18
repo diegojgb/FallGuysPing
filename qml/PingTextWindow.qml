@@ -110,7 +110,7 @@ Window {
 
         property int prevWidth
         property bool infoVisible: Manager.settings.locationOverlayEnabled
-                                   && Manager.geoLocator.country !== "D/C"
+                                   && Manager.geoLocator.country !== ""
 
         Component.onCompleted: {
             overlayBox.prevWidth = overlayBox.width

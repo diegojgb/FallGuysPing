@@ -15,6 +15,8 @@
 int main(int argc, char *argv[])
 {
     QApplication::setStyle(QStyleFactory::create("Fusion"));
+    QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
+
     SingleApplication app(argc, argv);
 
     Manager manager(&app, Manager::Both);

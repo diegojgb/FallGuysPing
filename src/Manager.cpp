@@ -23,7 +23,7 @@ Manager::Manager(QObject *parent, WindowMode windowMode)
     connect(&m_settings, &Settings::pingIntervalChangedOverload, &m_pinger, &Pinger::onPingIntervalChanged);
     connect(&m_settings, &Settings::quitOnGameExitChangedOverload, &m_fileWatcher, &FileWatcher::setQuitOnGameExit);
     connect(&m_settings, &Settings::locationToastEnabledChanged, this, &Manager::onLocationToastEnabledChanged);
-    connect(&m_settings, &Settings::locationOverlayEnabledChanged, this, &Manager::onLocationOverlayEnabledChanged);
+    connect(&m_settings, &Settings::locationEnabledChanged, this, &Manager::onLocationEnabledChanged);
 
     m_settings.loadSettings();
 }
@@ -142,14 +142,18 @@ void Manager::WinForegroundCallback(HWINEVENTHOOK hWinEventHook,
 
 void Manager::onIpFound(const QString& ip)
 {
+    setIp(ip);
     setConnected(true);
     m_pinger.start(ip);
+    m_stopwatch.start();
 }
 
 void Manager::onDisconnectFound()
 {
+    resetIp();
     setConnected(false);
     m_pinger.stop();
+    m_stopwatch.stop();
 }
 
 void Manager::showLocationToast(const QString& location)
@@ -163,26 +167,20 @@ void Manager::onLocationToastEnabledChanged()
 {
     bool enabled = m_settings.locationToastEnabled();
 
-    if (enabled) {
+    if (enabled)
         connect(&m_locator, &IPGeoLocator::locationFound, this, &Manager::showLocationToast);
-        if (!m_geoEnabled)
-            enableGeo();
-    } else {
+    else
         disconnect(&m_locator, &IPGeoLocator::locationFound, this, &Manager::showLocationToast);
-        if (!m_settings.locationOverlayEnabled())
-            disableGeo();
-    }
 }
 
-void Manager::onLocationOverlayEnabledChanged()
+void Manager::onLocationEnabledChanged()
 {
-    bool enabled = m_settings.locationOverlayEnabled();
+    bool enabled = m_settings.locationEnabled();
 
-    if (enabled && !m_geoEnabled) {
+    if (enabled)
         enableGeo();
-    } else if (!enabled && m_settings.locationToastEnabled()) {
+    else
         disableGeo();
-    }
 }
 
 bool Manager::isGameRunning()
@@ -241,6 +239,9 @@ void Manager::enableGeo()
     if (m_geoEnabled)
         return;
 
+    if (m_connected)
+        m_locator.findLocation(m_ip);
+
     connect(&m_fileWatcher, &FileWatcher::ipFound, &m_locator, &IPGeoLocator::findLocation);
     connect(&m_fileWatcher, &FileWatcher::disconnectFound, &m_locator, &IPGeoLocator::onDisconnectFound);
 
@@ -256,4 +257,29 @@ void Manager::disableGeo()
     disconnect(&m_fileWatcher, &FileWatcher::disconnectFound, &m_locator, &IPGeoLocator::onDisconnectFound);
 
     m_geoEnabled = false;
+}
+
+QString Manager::ip() const
+{
+    return m_ip;
+}
+
+void Manager::setIp(const QString& newIp)
+{
+    if (m_ip == newIp)
+        return;
+
+    m_ip = newIp;
+
+    emit ipChanged();
+}
+
+void Manager::resetIp()
+{
+    setIp("");
+}
+
+Stopwatch* Manager::stopwatch()
+{
+    return &m_stopwatch;
 }

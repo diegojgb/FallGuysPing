@@ -52,7 +52,8 @@ bool FileWatcher::matchServerInfo(std::string& text)
     }
 
     if (std::regex_search(text, m_resetRegex)) {
-        emit disconnectFound();
+        if (m_fileInitialized)
+            emit disconnectFound();
         return true;
     }
 
@@ -91,6 +92,7 @@ void FileWatcher::initCheck(const QString &filePath)
 void FileWatcher::addFilePath(const QString &filePath)
 {
     initCheck(filePath);
+    m_fileInitialized = true;
 
     QMetaObject::invokeMethod(m_watcher, "addPath", Qt::QueuedConnection,
                               Q_ARG(QString, filePath));

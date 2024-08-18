@@ -13,6 +13,7 @@ Settings::Settings(QObject* parent)
     , m_fontFamily{m_qSettings.value("FontFamily", "Segoe UI").toString()}
     , m_alwaysVisible{m_qSettings.value("AlwaysVisible", false).toBool()}
     , m_textCorner{TextCorner::textCornerFromString(m_qSettings.value("TextCorner", "TopRight").toString())}
+    , m_locationOverlayEnabled{m_qSettings.value("LocationOverlayEnabled", true).toBool()}
 {}
 
 bool Settings::startMinimized() const
@@ -157,7 +158,7 @@ void Settings::loadSettings()
     setPingInterval(m_qSettings.value("PingInterval", 5000).toInt()); // Setter needs to be called for Pinger/PingWorker to update.
     setQuitOnGameExit(m_qSettings.value("QuitOnGameExit", false).toBool()); // Setter needs to be called for FileWatcher to update.
     setLocationToastEnabled(m_qSettings.value("LocationToastEnabled", false).toBool());
-    setLocationOverlayEnabled(m_qSettings.value("LocationOverlayEnabled", true).toBool());
+    setLocationEnabled(m_qSettings.value("LocationEnabled", true).toBool());
 }
 
 void Settings::savePosition(QPoint point)
@@ -259,4 +260,21 @@ void Settings::setLocationOverlayEnabled(bool newLocationOverlayEnabled)
     m_qSettings.setValue("LocationOverlayEnabled", newLocationOverlayEnabled);
 
     emit locationOverlayEnabledChanged();
+}
+
+bool Settings::locationEnabled() const
+{
+    return m_locationEnabled;
+}
+
+void Settings::setLocationEnabled(bool newLocationEnabled)
+{
+    if (m_locationEnabled == newLocationEnabled)
+        return;
+
+    m_locationEnabled = newLocationEnabled;
+
+    m_qSettings.setValue("LocationEnabled", newLocationEnabled);
+
+    emit locationEnabledChanged();
 }

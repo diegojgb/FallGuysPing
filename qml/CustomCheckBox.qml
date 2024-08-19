@@ -17,6 +17,9 @@ CheckBox {
 
         color: {
             if (control.checked) {
+                if (!control.enabled)
+                    return Qt.lighter(control.uncheckedColor, 1.1)
+
                 if (control.pressed)
                     return Qt.darker(control.checkedColor, 1.2)
 
@@ -25,6 +28,9 @@ CheckBox {
 
                 return control.checkedColor
             }
+
+            if (!control.enabled)
+                return Qt.lighter(control.uncheckedColor, 1.1)
 
             if (control.pressed)
                 return Qt.darker(control.uncheckedColor, 1.2)
@@ -45,7 +51,7 @@ CheckBox {
     contentItem: Text {
         text: control.text
         font: control.font
-        opacity: enabled ? 1.0 : 0.3
+        opacity: enabled ? 1.0 : 0.6
         verticalAlignment: Text.AlignVCenter
         leftPadding: control.indicator.width + control.spacing
         renderType: Text.NativeRendering

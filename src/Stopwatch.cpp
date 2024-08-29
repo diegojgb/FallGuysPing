@@ -14,6 +14,14 @@ QString Stopwatch::elapsedTime() const
     return m_elapsedTime;
 }
 
+qint64 Stopwatch::getElapsedMs()
+{
+    if (!m_elapsedTimer->isValid())
+        return -1;
+
+    return m_elapsedTimer->elapsed();
+}
+
 void Stopwatch::start()
 {
     m_elapsedTimer->start();

@@ -158,6 +158,9 @@ void Manager::onDisconnectFound()
 
 void Manager::showLocationToast(const QString& location)
 {
+    if (m_stopwatch.getElapsedMs() > 5000)
+        return;
+
     TrayIcon::sendNotification(L"Connected to server",
                                location.toStdWString(),
                                QCoreApplication::applicationDirPath().toStdWString() + L"/assets/globe-location.png");
@@ -252,6 +255,8 @@ void Manager::disableGeo()
 {
     if (!m_geoEnabled)
         return;
+
+    m_locator.onDisconnectFound(); // Disables it (if enabled).
 
     disconnect(&m_fileWatcher, &FileWatcher::ipFound, &m_locator, &IPGeoLocator::findLocation);
     disconnect(&m_fileWatcher, &FileWatcher::disconnectFound, &m_locator, &IPGeoLocator::onDisconnectFound);

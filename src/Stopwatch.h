@@ -18,6 +18,8 @@ public:
 
     QString elapsedTime() const;
 
+    qint64 getElapsedMs();
+
 public slots:
     void start();
     void stop();

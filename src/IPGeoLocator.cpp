@@ -141,6 +141,9 @@ void IPGeoLocator::onReply(QNetworkReply* reply, const QString& serviceUrl)
 
 void IPGeoLocator::onDisconnectFound()
 {
+    if (!m_active)
+        return;
+
     setActive(false);
 
     setRegion("");

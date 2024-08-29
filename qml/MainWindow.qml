@@ -89,12 +89,6 @@ ApplicationWindow {
             }
 
             OverlayPage {
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.topMargin: 24
-                anchors.leftMargin: 20
-
                 visible: root.activeView === MainWindow.View.OverlayView
             }
 

@@ -7,7 +7,6 @@ Text {
     style: Manager.settings.textOutline ? Text.Outline : Text.Normal
     font.bold: Manager.settings.boldText
     font.family: Manager.settings.fontFamily
-    renderType: Text.NativeRendering
 
     // rightPadding: root.textPadding
     // leftPadding: root.textPadding

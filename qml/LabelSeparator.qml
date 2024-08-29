@@ -11,7 +11,6 @@ RowLayout {
     Label {
         id: label
         font.pointSize: 10
-        renderType: Text.NativeRendering
         color: "#222"
     }
 

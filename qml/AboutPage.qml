@@ -36,13 +36,11 @@ ColumnLayout {
         Layout.topMargin: 10
         text: '© 2024 - Diego Gonzalez'
         font.pointSize: 10
-        renderType: Text.NativeRendering
     }
 
     Label {
         Layout.leftMargin: 26
         text: 'Released: August 2024'
         font.pointSize: 10
-        renderType: Text.NativeRendering
     }
 }

@@ -21,7 +21,6 @@ ComboBox {
             verticalAlignment: Text.AlignVCenter
             anchors.left: parent.left
             leftPadding: 8
-            renderType: Text.NativeRendering
         }
 
         highlighted: control.highlightedIndex === index
@@ -69,7 +68,6 @@ ComboBox {
         font: control.font
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
-        renderType: Text.NativeRendering
     }
 
     background: Rectangle {

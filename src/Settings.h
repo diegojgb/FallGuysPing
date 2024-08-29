@@ -26,6 +26,9 @@ class Settings : public QObject
     Q_PROPERTY(bool locationToastEnabled READ locationToastEnabled WRITE setLocationToastEnabled NOTIFY locationToastEnabledChanged FINAL)
     Q_PROPERTY(bool locationOverlayEnabled READ locationOverlayEnabled WRITE setLocationOverlayEnabled NOTIFY locationOverlayEnabledChanged FINAL)
     Q_PROPERTY(bool locationEnabled READ locationEnabled WRITE setLocationEnabled NOTIFY locationEnabledChanged FINAL)
+    Q_PROPERTY(QColor bgColor READ bgColor WRITE setBgColor NOTIFY bgColorChanged FINAL)
+    Q_PROPERTY(int bgPadding READ bgPadding WRITE setBgPadding NOTIFY bgPaddingChanged FINAL)
+    Q_PROPERTY(bool bgEnabled READ bgEnabled WRITE setBgEnabled NOTIFY bgEnabledChanged FINAL)
 
 public:
     explicit Settings(QObject* parent = nullptr);
@@ -77,6 +80,15 @@ public:
     bool locationEnabled() const;
     void setLocationEnabled(bool newLocationEnabled);
 
+    QColor bgColor() const;
+    void setBgColor(const QColor &newBgColor);
+
+    int bgPadding() const;
+    void setBgPadding(int newBgPadding);
+
+    bool bgEnabled() const;
+    void setBgEnabled(bool newBgEnabled);
+
 signals:
     void startMinimizedChanged();
     void draggableTextChanged();
@@ -92,6 +104,9 @@ signals:
     void locationToastEnabledChanged();
     void locationOverlayEnabledChanged();
     void locationEnabledChanged();
+    void bgColorChanged();
+    void bgPaddingChanged();
+    void bgEnabledChanged();
 
     void quitOnGameExitChangedOverload(bool value);
     void pingIntervalChangedOverload(int interval);
@@ -103,6 +118,8 @@ private:
     bool m_draggableText{};
     TextCorner::Value m_textCorner = TextCorner::Value::TopRight;
     QColor m_textColor;
+    QColor m_bgColor;
+    int m_bgPadding{};
     int m_textSize{};
     bool m_textOutline{};
     bool m_boldText{};
@@ -113,6 +130,7 @@ private:
     bool m_locationToastEnabled{};
     bool m_locationOverlayEnabled{};
     bool m_locationEnabled{};
+    bool m_bgEnabled{};
 };
 
 #endif // SETTINGS_H

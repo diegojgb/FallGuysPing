@@ -54,6 +54,5 @@ CheckBox {
         opacity: enabled ? 1.0 : 0.6
         verticalAlignment: Text.AlignVCenter
         leftPadding: control.indicator.width + control.spacing
-        renderType: Text.NativeRendering
     }
 }

@@ -30,7 +30,6 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignVCenter
                 bottomPadding: 2
                 text: "Ping interval (seconds):"
-                renderType: Text.NativeRendering
             }
 
             FusionSpinBox {

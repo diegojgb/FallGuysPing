@@ -21,7 +21,6 @@ SpinBox {
         selectedTextColor: "#fff"
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
-        renderType: Text.NativeRendering
         readOnly: !control.editable
         validator: control.validator
         inputMethodHints: Qt.ImhFormattedNumbersOnly

@@ -103,6 +103,22 @@ Window {
         visible: dragArea.containsMouse
     }
 
+    Rectangle {
+        height: overlayBox.height
+        width: overlayBox.width + fontMetrics.descent * 2
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: (parent.height - height) / 2 + fontMetrics.descent * 0.2
+
+        visible: Manager.settings.bgEnabled
+        color: Manager.settings.bgColor
+    }
+
+    FontMetrics {
+        id: fontMetrics
+        font: pingText.font
+    }
+
     RowLayout {
         id: overlayBox
         spacing: 7
@@ -173,23 +189,6 @@ Window {
                 pingText.prevWidth = pingText.width
                 pingText.prevTextLen = pingText.text.length
             }
-
-            // onTextChanged: {
-            //     if (root.textCorner !== TextCorner.Custom)
-            //         return
-
-            //     var middleLine = Screen.width / 2
-            //     if (root.x <= middleLine)
-            //         return
-
-            //     if (pingText.text.length !== pingText.prevTextLen) {
-            //         var newSpace = pingText.width - pingText.prevWidth
-            //         root.x = root.x - newSpace
-
-            //         pingText.prevTextLen = pingText.text.length
-            //         pingText.prevWidth = pingText.width
-            //     }
-            // }
         }
     }
 

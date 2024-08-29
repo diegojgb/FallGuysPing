@@ -14,6 +14,9 @@ Settings::Settings(QObject* parent)
     , m_alwaysVisible{m_qSettings.value("AlwaysVisible", false).toBool()}
     , m_textCorner{TextCorner::textCornerFromString(m_qSettings.value("TextCorner", "TopRight").toString())}
     , m_locationOverlayEnabled{m_qSettings.value("LocationOverlayEnabled", true).toBool()}
+    , m_bgColor{QColor(m_qSettings.value("BackgroundColor", "#333").toString())}
+    , m_bgPadding{m_qSettings.value("BackgroundPadding", 5).toInt()}
+    , m_bgEnabled{m_qSettings.value("BackgroundEnabled", false).toBool()}
 {}
 
 bool Settings::startMinimized() const
@@ -277,4 +280,55 @@ void Settings::setLocationEnabled(bool newLocationEnabled)
     m_qSettings.setValue("LocationEnabled", newLocationEnabled);
 
     emit locationEnabledChanged();
+}
+
+QColor Settings::bgColor() const
+{
+    return m_bgColor;
+}
+
+void Settings::setBgColor(const QColor &newBgColor)
+{
+    if (m_bgColor == newBgColor)
+        return;
+
+    m_bgColor = newBgColor;
+
+    m_qSettings.setValue("BackgroundColor", newBgColor.name());
+
+    emit bgColorChanged();
+}
+
+int Settings::bgPadding() const
+{
+    return m_bgPadding;
+}
+
+void Settings::setBgPadding(int newBgPadding)
+{
+    if (m_bgPadding == newBgPadding)
+        return;
+
+    m_bgPadding = newBgPadding;
+
+    m_qSettings.setValue("BackgroundPadding", newBgPadding);
+
+    emit bgPaddingChanged();
+}
+
+bool Settings::bgEnabled() const
+{
+    return m_bgEnabled;
+}
+
+void Settings::setBgEnabled(bool newBgEnabled)
+{
+    if (m_bgEnabled == newBgEnabled)
+        return;
+
+    m_bgEnabled = newBgEnabled;
+
+    m_qSettings.setValue("BackgroundEnabled", newBgEnabled);
+
+    emit bgEnabledChanged();
 }

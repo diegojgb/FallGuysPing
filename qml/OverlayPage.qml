@@ -114,26 +114,24 @@ Flickable {
                 Layout.topMargin: 15
                 spacing: 15
 
-                CustomComboBox {
-                    id: fontFamilyBox
-                    model: root.supportedFonts
-                    popupHeight: 180
-                    currentIndex: fontFamilyBox.model.indexOf(
-                                      Manager.settings.fontFamily)
-                    displayText: metrics.elidedText
+                // CustomComboBox {
+                //     id: fontFamilyBox
+                //     model: root.supportedFonts
+                //     popupHeight: 180
+                //     currentIndex: fontFamilyBox.model.indexOf(
+                //                       Manager.settings.fontFamily)
+                //     displayText: metrics.elidedText
 
-                    TextMetrics {
-                        id: metrics
-                        text: fontFamilyBox.currentText
-                        elide: Qt.ElideRight
-                        elideWidth: fontFamilyBox.width - 30
-                    }
+                //     TextMetrics {
+                //         id: metrics
+                //         text: fontFamilyBox.currentText
+                //         elide: Qt.ElideRight
+                //         elideWidth: fontFamilyBox.width - 30
+                //     }
 
-                    onCurrentTextChanged: Manager.settings.fontFamily = fontFamilyBox.currentText
-                }
-
+                //     onCurrentTextChanged: Manager.settings.fontFamily = fontFamilyBox.currentText
+                // }
                 CustomCheckBox {
-                    Layout.leftMargin: 5
                     text: "Bold text"
                     spacing: 6
                     checked: Manager.settings.boldText

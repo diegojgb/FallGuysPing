@@ -339,7 +339,10 @@ const QHash<QString, QString> GeoData::countryRegionHash = {
     {"MN", "Asia (East)"},
     {"TW", "Asia (East)"},
     {"HK", "Asia (East)"},
-    {"MO", "Asia (East)"}
+    {"MO", "Asia (East)"},
+    {"JP", "Japan"},
+    {"AU", "Australia"},
+    {"KR", "Korea"}
 };
 
 const QHash<QString, QString> GeoData::stateRegionHash = {

@@ -41,7 +41,8 @@ Column {
                 Layout.fillHeight: true
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                text: control.locationActive ? Manager.geoLocator.serverRegion : "-"
+                text: control.locationActive ? Manager.geoLocator.serverRegion
+                                               === "" ? "?" : Manager.geoLocator.serverRegion : "-"
                 font.pointSize: 13
                 font.weight: Font.DemiBold
             }

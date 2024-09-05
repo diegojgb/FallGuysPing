@@ -63,20 +63,25 @@ bool Manager::isProcessRunning(LPCTSTR& processName)
 
 bool Manager::isGameActiveCheck(WindowMode mode)
 {
-    wchar_t wnd_title[256];
     bool isForeground = false;
     bool isFocused = false;
     
     if (mode != WindowMode::Foreground) {
         HWND focusHwnd = GetFocus();
-        GetWindowText(focusHwnd, wnd_title, sizeof(wnd_title));
-        isFocused = wcscmp(wnd_title, GAME_TITLE) == 0;
+        int length = GetWindowTextLength(focusHwnd) + 1; // +1 for the null character.
+        wchar_t* windowTitle = new wchar_t[length];
+        GetWindowText(focusHwnd, windowTitle, length);
+        isFocused = wcscmp(windowTitle, GAME_TITLE) == 0;
+        delete[] windowTitle;
     }
 
     if (mode != WindowMode::Focus) {
         HWND foregroundHwnd = GetForegroundWindow();
-        GetWindowText(foregroundHwnd, wnd_title, sizeof(wnd_title));
-        isForeground = wcscmp(wnd_title, GAME_TITLE) == 0;
+        int length = GetWindowTextLength(foregroundHwnd) + 1; // +1 for the null character.
+        wchar_t* windowTitle = new wchar_t[length];
+        GetWindowText(foregroundHwnd, windowTitle, length);
+        isForeground = wcscmp(windowTitle, GAME_TITLE) == 0;
+        delete[] windowTitle;
     }
 
     return isFocused || isForeground;
@@ -113,12 +118,15 @@ VOID CALLBACK Manager::WinFocusCallback(HWINEVENTHOOK hWinEventHook,
                                    DWORD dwmsEventTime)
 {
     if (dwEvent == EVENT_OBJECT_FOCUS) {
-        wchar_t windowTitle[256];
-        GetWindowText(hwnd, windowTitle, sizeof(windowTitle));
+        int length = GetWindowTextLength(hwnd) + 1; // +1 for the null character.
+        wchar_t* windowTitle = new wchar_t[length];
+        GetWindowText(hwnd, windowTitle, length);
 
         bool isGameFocused = wcscmp(windowTitle, GAME_TITLE) == 0;
 
         g_managerInstance->setIsGameActive(isGameFocused);
+
+        delete[] windowTitle;
     }
 }
 
@@ -131,12 +139,15 @@ void Manager::WinForegroundCallback(HWINEVENTHOOK hWinEventHook,
                                     DWORD dwmsEventTime)
 {
     if (dwEvent == EVENT_SYSTEM_FOREGROUND) {
-        wchar_t windowTitle[256];
-        GetWindowText(hwnd, windowTitle, sizeof(windowTitle));
+        int length = GetWindowTextLength(hwnd) + 1; // +1 for the null character.
+        wchar_t* windowTitle = new wchar_t[length];
+        GetWindowText(hwnd, windowTitle, length);
 
         bool isGameForeground = wcscmp(windowTitle, GAME_TITLE) == 0;
 
         g_managerInstance->setIsGameActive(isGameForeground);
+
+        delete[] windowTitle;
     }
 }
 

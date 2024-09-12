@@ -346,6 +346,7 @@ const QHash<QString, QString> GeoData::countryRegionHash = {
 };
 
 const QHash<QString, QString> GeoData::stateRegionHash = {
+    {"District of Columbia", "East"},
     {"Mississippi", "East"},
     {"Massachusetts", "East"},
     {"North Carolina", "East"},

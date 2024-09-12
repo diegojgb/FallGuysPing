@@ -77,7 +77,7 @@ Window {
     function bindX(corner) {
         if (corner === TextCorner.TopLeft || corner === TextCorner.BottomLeft)
             root.x = Qt.binding(function () {
-                return -root.textPadding + 3
+                return -root.textPadding + 4
             })
 
         if (corner === TextCorner.TopRight || corner === TextCorner.BottomRight)
@@ -88,12 +88,12 @@ Window {
 
     function bindY(corner) {
         if (corner === TextCorner.TopLeft || corner === TextCorner.TopRight)
-            root.y = -root.textPadding - 5
+            root.y = -root.textPadding - 4
 
         if (corner === TextCorner.BottomLeft
                 || corner === TextCorner.BottomRight)
             root.y = Qt.binding(function () {
-                return Screen.height - overlayBox.height + 10
+                return Screen.height - overlayBox.height - root.textPadding
             })
     }
 

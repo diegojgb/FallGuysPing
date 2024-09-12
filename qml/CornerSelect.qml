@@ -6,10 +6,7 @@ import TextCorner 1.0
 Item {
     id: control
 
-    property int selectedValue: Manager.settings.textCorner
     property color fillColor: root.sidebarBgColor
-
-    onSelectedValueChanged: Manager.settings.textCorner = control.selectedValue
 
     Rectangle {
         anchors.fill: parent
@@ -31,32 +28,35 @@ Item {
             anchors.top: parent.top
             anchors.left: parent.left
             spacing: 0
-            checked: control.selectedValue === TextCorner.TopLeft
-            onClicked: control.selectedValue = TextCorner.TopLeft
+            checked: Manager.settings.textCorner === TextCorner.TopLeft
+            onClicked: Manager.settings.textCorner = TextCorner.TopLeft
         }
+
         SquareRadioButton {
             id: topRightButton
             anchors.top: parent.top
             anchors.right: parent.right
             spacing: 0
-            checked: control.selectedValue === TextCorner.TopRight
-            onClicked: control.selectedValue = TextCorner.TopRight
+            checked: Manager.settings.textCorner === TextCorner.TopRight
+            onClicked: Manager.settings.textCorner = TextCorner.TopRight
         }
+
         SquareRadioButton {
             id: bottomLeftButton
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             spacing: 0
-            checked: control.selectedValue === TextCorner.BottomLeft
-            onClicked: control.selectedValue = TextCorner.BottomLeft
+            checked: Manager.settings.textCorner === TextCorner.BottomLeft
+            onClicked: Manager.settings.textCorner = TextCorner.BottomLeft
         }
+
         SquareRadioButton {
             id: bottomRightButton
             anchors.bottom: parent.bottom
             anchors.right: parent.right
             spacing: 0
-            checked: control.selectedValue === TextCorner.BottomRight
-            onClicked: control.selectedValue = TextCorner.BottomRight
+            checked: Manager.settings.textCorner === TextCorner.BottomRight
+            onClicked: Manager.settings.textCorner = TextCorner.BottomRight
         }
     }
 }

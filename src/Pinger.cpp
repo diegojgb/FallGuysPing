@@ -21,6 +21,7 @@ Pinger::Pinger(QObject *parent)
 
 void Pinger::start(const QString& ip)
 {
+    m_active = true;
     QMetaObject::invokeMethod(m_worker, "startIp", Qt::QueuedConnection,
                               Q_ARG(QString, ip));
 }
@@ -28,6 +29,7 @@ void Pinger::start(const QString& ip)
 void Pinger::stop()
 {
     QMetaObject::invokeMethod(m_worker, "stopIp", Qt::QueuedConnection);
+    m_active = false;
     resetValues();
 }
 
@@ -48,6 +50,9 @@ void Pinger::setLatestPing(const QString& newLatestPing)
 
 void Pinger::onPinged(const QString& latency)
 {
+    if (!m_active)
+        return;
+
     int ping = latency.toInt();
     m_sum += ping;
     m_count++;

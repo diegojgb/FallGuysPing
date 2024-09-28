@@ -39,7 +39,6 @@ signals:
     void avgPingChanged();
     void maxPingChanged();
     void minPingChanged();
-
     void avg10PingChanged();
 
 private:
@@ -60,6 +59,7 @@ private:
     int m_count = 0;
     int m_max = 0;
     int m_min = 0;
+    bool m_active = false;
 
     void resetValues();
     int calcAvg10(const int latency);

@@ -84,6 +84,10 @@ void Pinger::resetValues()
     m_count = 0;
     m_max = 0;
     m_min = 0;
+    m_sum10 = 0;
+    m_count10 = 0;
+    m_currentIndex = 0;
+    std::fill(std::begin(m_latencies), std::end(m_latencies), 0);
 
     setLatestPing("0");
     setAvgPing("0");

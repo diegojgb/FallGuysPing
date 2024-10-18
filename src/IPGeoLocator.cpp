@@ -80,8 +80,8 @@ void IPGeoLocator::onReply(QNetworkReply* reply, const QString& serviceUrl)
     if (reply->error() != QNetworkReply::NoError) {
         qCritical() << "[IPGeoLocator]: " << reply->errorString();
 
-        if (serviceUrl == IP2LOCATION_URL)
-            queryAPI(m_currentIp, IPINFO_URL);
+        if (serviceUrl == IPINFO_URL)
+            queryAPI(m_currentIp, IP2LOCATION_URL);
 
         return;
     }

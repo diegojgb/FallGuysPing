@@ -93,11 +93,9 @@ ApplicationWindow {
             }
 
             AboutPage {
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
+                anchors.fill: parent
                 anchors.topMargin: 32
-                anchors.leftMargin: 28
+                anchors.leftMargin: 20
 
                 visible: root.activeView === MainWindow.View.AboutView
             }

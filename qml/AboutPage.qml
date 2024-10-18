@@ -43,4 +43,23 @@ ColumnLayout {
         text: 'Released: August 2024'
         font.pointSize: 10
     }
+
+    Item {
+        Layout.preferredWidth: 1
+        Layout.fillHeight: true
+    }
+
+    Text {
+        Layout.fillWidth: true
+        Layout.bottomMargin: 20
+        Layout.rightMargin: 30
+        color: "#444"
+        text: 'FallGuysPing uses <a href="https://ipinfo.io">ipinfo.io</a> IP geolocation web service, and <a href="https://ip2location.io">ip2location.io</a> as a backup.'
+        font.pointSize: 9
+        wrapMode: Text.WordWrap
+        textFormat: Text.RichText
+        onLinkActivated: function (url) {
+            Qt.openUrlExternally(url)
+        }
+    }
 }

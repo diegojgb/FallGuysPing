@@ -90,6 +90,7 @@ Column {
         useMainColor: true
         labelText: "Time"
         valueText: control.locationActive ? Manager.stopwatch.elapsedTime : "-"
+        selectable: false
         bottomLeftRadius: control.props.radius
         bottomRightRadius: control.props.radius
     }

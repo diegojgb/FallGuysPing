@@ -11,6 +11,7 @@ Rectangle {
     required property ServerInfoProps props
     property alias labelText: labelItem.text
     property alias valueText: valueItem.text
+    property alias selectable: valueItem.selectByMouse
     property bool useMainColor: true
 
     Text {
@@ -22,11 +23,13 @@ Rectangle {
         font.weight: Font.DemiBold
     }
 
-    Text {
+    TextEdit {
         id: valueItem
         anchors.left: borderRect.right
         anchors.leftMargin: 6
         height: parent.height
+        readOnly: true
+        selectByMouse: true
         font.pointSize: control.props.fontSize
         verticalAlignment: Text.AlignVCenter
     }

@@ -8,6 +8,7 @@ Flickable {
     anchors.fill: parent
     ScrollBar.vertical: ScrollBar {}
     boundsBehavior: Flickable.StopAtBounds
+    focusPolicy: Qt.ClickFocus
     contentHeight: page.height + page.anchors.topMargin + bottomPadding
 
     property int bottomPadding: 45
